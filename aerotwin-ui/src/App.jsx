@@ -3,6 +3,7 @@ import { ShieldAlert, Activity, Cpu, Thermometer, Droplets, Map, Radio, Terminal
 import BootScreen from './BootScreen';
 import FleetCommand from './FleetCommand';
 import LiveTelemetryChart from './LiveTelemetryChart';
+import Engine3DView from './Engine3DView';
 import './App.css'; // empty now
 
 function Dashboard({ drone, onBack }) {
@@ -138,35 +139,9 @@ function Dashboard({ drone, onBack }) {
         </div>
       </aside>
 
-      {/* CENTER: 3D DIGITAL TWIN (Placeholder) */}
-      <main className="tactical-panel" style={{ gridColumn: '2 / 3', gridRow: '2 / 3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ position: 'absolute', top: '15px', left: '15px' }} className="panel-title">
-          <Cpu size={16} /> AE300 DIGITAL TWIN VISUALIZATION
-        </div>
-        
-        {/* Abstract engine graphic placeholder */}
-        <div style={{ position: 'relative', width: '300px', height: '300px' }}>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', height: '100%', border: '2px dashed var(--border-color)', borderRadius: '50%', animation: 'spin 20s linear infinite' }}></div>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '70%', height: '70%', border: '1px solid var(--accent-cyan)', borderRadius: '50%' }}></div>
-          
-          {/* Engine Cylinders */}
-          <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%, -50%)', width: '40px', height: '60px', border: '1px solid var(--accent-cyan)', background: 'rgba(0, 240, 255, 0.1)' }}></div>
-          <div style={{ position: 'absolute', bottom: '20%', left: '50%', transform: 'translate(-50%, 50%)', width: '40px', height: '60px', border: '1px solid var(--accent-cyan)', background: 'rgba(0, 240, 255, 0.1)' }}></div>
-          <div style={{ position: 'absolute', top: '50%', left: '20%', transform: 'translate(-50%, -50%)', width: '60px', height: '40px', border: '1px solid var(--accent-cyan)', background: 'rgba(0, 240, 255, 0.1)' }}></div>
-          <div style={{ position: 'absolute', top: '50%', right: '20%', transform: 'translate(50%, -50%)', width: '60px', height: '40px', border: '1px solid var(--accent-red)', background: 'rgba(255, 51, 51, 0.2)', boxShadow: 'var(--border-red-glow)' }}></div>
-          
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'var(--text-muted)', fontSize: '0.8rem', textAlign: 'center' }}>
-            <span style={{ color: 'var(--accent-red)', fontWeight: 'bold' }}>ANOMALY</span><br/>CYL 4
-          </div>
-        </div>
-
-        <style>{`
-          @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        `}</style>
-
-        <div style={{ position: 'absolute', bottom: '15px', right: '15px', color: 'var(--text-muted)', fontSize: '0.7rem', fontFamily: '"JetBrains Mono", monospace' }}>
-          RENDER: WIREFRAME | PHYSICS MODEL: ACTIVE
-        </div>
+      {/* CENTER: 3D DIGITAL TWIN */}
+      <main className="tactical-panel" style={{ gridColumn: '2 / 3', gridRow: '2 / 3', padding: '0', overflow: 'hidden', position: 'relative' }}>
+        <Engine3DView telemetry={telemetry} />
       </main>
 
       {/* RIGHT PANEL: AI ANALYTICS & RUL */}
