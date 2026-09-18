@@ -14,7 +14,7 @@ function Dashboard({ drone, onBack }) {
     rpm: 4050,
     cht: 195.0,
     egt: 810,
-    oilPres: 4.5,
+    oilPress: 4.5,
     fuelFlow: 14.0,
   });
 
@@ -91,49 +91,49 @@ function Dashboard({ drone, onBack }) {
           <div>
             <div className="data-row">
               <span className="data-label font-mono">ENGINE RPM</span>
-              <span className="data-value cyan font-mono">{telemetry.rpm.toFixed(0)}</span>
+              <span className="data-value cyan font-mono">{(telemetry?.rpm ?? 0).toFixed(0)}</span>
             </div>
             <div className="health-bar-container">
-              <div className="health-bar-fill" style={{ width: `${(telemetry.rpm / 5000) * 100}%` }}></div>
+              <div className="health-bar-fill" style={{ width: `${((telemetry?.rpm ?? 0) / 5000) * 100}%` }}></div>
             </div>
           </div>
 
           <div>
             <div className="data-row">
               <span className="data-label font-mono"><Thermometer size={14} style={{display:'inline'}}/> CHT (°C)</span>
-              <span className={`data-value font-mono ${telemetry.cht > 220 ? 'red' : telemetry.cht > 200 ? 'amber' : 'cyan'}`}>
-                {telemetry.cht.toFixed(1)}
+              <span className={`data-value font-mono ${(telemetry?.cht ?? 0) > 220 ? 'red' : (telemetry?.cht ?? 0) > 200 ? 'amber' : 'cyan'}`}>
+                {(telemetry?.cht ?? 0).toFixed(1)}
               </span>
             </div>
             <div className="health-bar-container">
-              <div className={`health-bar-fill ${telemetry.cht > 220 ? 'critical' : telemetry.cht > 200 ? 'warning' : ''}`} style={{ width: `${(telemetry.cht / 250) * 100}%` }}></div>
+              <div className={`health-bar-fill ${(telemetry?.cht ?? 0) > 220 ? 'critical' : (telemetry?.cht ?? 0) > 200 ? 'warning' : ''}`} style={{ width: `${((telemetry?.cht ?? 0) / 250) * 100}%` }}></div>
             </div>
           </div>
 
           <div>
             <div className="data-row">
               <span className="data-label font-mono"><Thermometer size={14} style={{display:'inline'}}/> EGT (°C)</span>
-              <span className="data-value cyan font-mono">{telemetry.egt.toFixed(0)}</span>
+              <span className="data-value cyan font-mono">{(telemetry?.egt ?? 0).toFixed(0)}</span>
             </div>
             <div className="health-bar-container">
-              <div className="health-bar-fill" style={{ width: `${(telemetry.egt / 1000) * 100}%` }}></div>
+              <div className="health-bar-fill" style={{ width: `${((telemetry?.egt ?? 0) / 1000) * 100}%` }}></div>
             </div>
           </div>
 
           <div>
             <div className="data-row">
               <span className="data-label font-mono"><Droplets size={14} style={{display:'inline'}}/> OIL PRESS (BAR)</span>
-              <span className="data-value cyan font-mono">{telemetry.oilPres.toFixed(2)}</span>
+              <span className="data-value cyan font-mono">{(telemetry?.oilPress ?? telemetry?.oilPres ?? 0).toFixed(2)}</span>
             </div>
             <div className="health-bar-container">
-              <div className="health-bar-fill" style={{ width: `${(telemetry.oilPres / 6) * 100}%` }}></div>
+              <div className="health-bar-fill" style={{ width: `${((telemetry?.oilPress ?? telemetry?.oilPres ?? 0) / 6) * 100}%` }}></div>
             </div>
           </div>
           
           <div>
             <div className="data-row">
               <span className="data-label font-mono">FUEL FLOW (L/H)</span>
-              <span className="data-value cyan font-mono">{telemetry.fuelFlow.toFixed(1)}</span>
+              <span className="data-value cyan font-mono">{(telemetry?.fuelFlow ?? 0).toFixed(1)}</span>
             </div>
           </div>
         </div>

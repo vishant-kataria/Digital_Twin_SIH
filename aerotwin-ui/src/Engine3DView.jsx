@@ -275,9 +275,9 @@ export default function Engine3DView({ telemetry }) {
 
       const elapsedTime = clock.getElapsedTime();
       const telem = telemetryRef.current || {};
-      const currentCht = telem.cht_c || 120;
-      const currentEgt = telem.egt_c || 650;
-      const currentRpm = telem.rpm || 2400;
+      const currentCht = telem.cht ?? telem.cht_c ?? 120;
+      const currentEgt = telem.egt ?? telem.egt_c ?? 650;
+      const currentRpm = telem.rpm ?? 2400;
       const isFault = telem.fault_label && telem.fault_label !== 0;
 
       // Auto-Rotation
@@ -359,10 +359,13 @@ export default function Engine3DView({ telemetry }) {
   }, []);
 
   const telem = telemetry || {};
-  const cht = telem.cht_c ? telem.cht_c.toFixed(1) : '120.0';
-  const egt = telem.egt_c ? telem.egt_c.toFixed(1) : '650.0';
-  const rpm = telem.rpm ? telem.rpm.toFixed(0) : '2400';
-  const isOverheat = telem.cht_c > 175 || telem.fault_label > 0;
+  const chtVal = telem.cht ?? telem.cht_c ?? 120;
+  const egtVal = telem.egt ?? telem.egt_c ?? 650;
+  const rpmVal = telem.rpm ?? 2400;
+  const isOverheat = chtVal > 175 || (telem.fault_label && telem.fault_label > 0);
+  const cht = (typeof chtVal === 'number' ? chtVal : 120).toFixed(1);
+  const egt = (typeof egtVal === 'number' ? egtVal : 650).toFixed(1);
+  const rpm = (typeof rpmVal === 'number' ? rpmVal : 2400).toFixed(0);
 
   return (
     <div className="engine-3d-card card">
