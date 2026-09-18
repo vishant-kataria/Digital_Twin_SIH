@@ -5,13 +5,20 @@ export default function BootScreen({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
     if (!username || !password) return;
     setLoading(true);
+    setError('');
     setTimeout(() => {
-      onLogin();
+      if (username === '123456' && password === '123456') {
+        onLogin();
+      } else {
+        setError('AUTHORISATION FAIL');
+        setLoading(false);
+      }
     }, 800);
   };
 
@@ -64,6 +71,23 @@ export default function BootScreen({ onLogin }) {
         {/* Login Form */}
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
+          {error && (
+            <div style={{
+              background: 'rgba(255, 0, 51, 0.1)',
+              border: '1px solid #ff0033',
+              color: '#ff0033',
+              padding: '10px',
+              borderRadius: '4px',
+              textAlign: 'center',
+              fontSize: '0.85rem',
+              letterSpacing: '1px',
+              fontWeight: 'bold',
+              textTransform: 'uppercase'
+            }}>
+              {error}
+            </div>
+          )}
+
           <div style={{ position: 'relative' }}>
             <User size={18} color="#8b9bb4" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
             <input 
