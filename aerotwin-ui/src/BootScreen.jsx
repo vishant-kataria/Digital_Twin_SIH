@@ -26,62 +26,64 @@ export default function BootScreen({ onLogin }) {
     <div style={{
       height: '100vh',
       width: '100vw',
-      /* Professional Blue/Black Stripes Background */
-      background: 'repeating-linear-gradient(-45deg, #050810, #050810 40px, #0a1224 40px, #0a1224 80px)',
+      background: '#F8FAFC',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       fontFamily: '"Inter", sans-serif'
     }}>
       
-      {/* Clean Corporate Login Card */}
+      {/* Clean Enterprise Defense Portal Card */}
       <div style={{
-        background: 'rgba(11, 14, 20, 0.95)',
-        border: '1px solid rgba(0, 100, 255, 0.2)',
-        borderRadius: '8px',
+        background: '#FFFFFF',
+        border: '1px solid #E2E8F0',
+        borderRadius: '12px',
         width: '100%',
         maxWidth: '420px',
         padding: '40px',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '30px'
+        gap: '28px'
       }}>
         
         {/* Branding Header */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
           <div style={{ 
-            background: 'linear-gradient(135deg, #0033cc 0%, #0099ff 100%)', 
+            background: '#1E40AF', 
             borderRadius: '50%', 
             padding: '14px',
-            boxShadow: '0 0 20px rgba(0, 100, 255, 0.4)'
+            boxShadow: '0 4px 12px rgba(30, 64, 175, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}>
-            <Shield color="#fff" size={32} />
+            <Shield color="#FFFFFF" size={30} />
           </div>
           <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '1.4rem', color: '#ffffff', letterSpacing: '2px', textTransform: 'uppercase', margin: '0 0 5px 0' }}>
+            <h1 style={{ fontSize: '1.35rem', color: '#0F172A', letterSpacing: '1px', textTransform: 'uppercase', margin: '0 0 4px 0', fontWeight: 700 }}>
               DRDO AeroTwin
             </h1>
-            <div style={{ fontSize: '0.75rem', color: '#8b9bb4', letterSpacing: '1px' }}>
+            <div style={{ fontSize: '0.72rem', color: '#64748B', letterSpacing: '1px', fontWeight: 600 }}>
               SECURE UAV COMMAND PORTAL
             </div>
           </div>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
           {error && (
             <div style={{
-              background: 'rgba(255, 0, 51, 0.1)',
-              border: '1px solid #ff0033',
-              color: '#ff0033',
+              background: '#FEF2F2',
+              border: '1px solid #FECACA',
+              color: '#B91C1C',
               padding: '10px',
-              borderRadius: '4px',
+              borderRadius: '6px',
               textAlign: 'center',
-              fontSize: '0.85rem',
-              letterSpacing: '1px',
-              fontWeight: 'bold',
+              fontSize: '0.82rem',
+              letterSpacing: '0.5px',
+              fontWeight: 600,
               textTransform: 'uppercase'
             }}>
               {error}
@@ -89,7 +91,7 @@ export default function BootScreen({ onLogin }) {
           )}
 
           <div style={{ position: 'relative' }}>
-            <User size={18} color="#8b9bb4" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
+            <User size={18} color="#64748B" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
             <input 
               type="text" 
               placeholder="Operator ID" 
@@ -97,23 +99,23 @@ export default function BootScreen({ onLogin }) {
               onChange={(e) => setUsername(e.target.value)}
               style={{
                 width: '100%',
-                background: '#050810',
-                border: '1px solid #1f2937',
-                borderRadius: '4px',
+                background: '#F8FAFC',
+                border: '1px solid #CBD5E1',
+                borderRadius: '6px',
                 padding: '12px 15px 12px 45px',
-                color: '#ffffff',
+                color: '#0F172A',
                 fontSize: '0.95rem',
                 outline: 'none',
                 transition: 'border-color 0.2s',
                 boxSizing: 'border-box'
               }}
-              onFocus={(e) => e.target.style.borderColor = '#0099ff'}
-              onBlur={(e) => e.target.style.borderColor = '#1f2937'}
+              onFocus={(e) => e.target.style.borderColor = '#2563EB'}
+              onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
             />
           </div>
 
           <div style={{ position: 'relative' }}>
-            <Lock size={18} color="#8b9bb4" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
+            <Lock size={18} color="#64748B" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
             <input 
               type="password" 
               placeholder="Passcode" 
@@ -121,18 +123,18 @@ export default function BootScreen({ onLogin }) {
               onChange={(e) => setPassword(e.target.value)}
               style={{
                 width: '100%',
-                background: '#050810',
-                border: '1px solid #1f2937',
-                borderRadius: '4px',
+                background: '#F8FAFC',
+                border: '1px solid #CBD5E1',
+                borderRadius: '6px',
                 padding: '12px 15px 12px 45px',
-                color: '#ffffff',
+                color: '#0F172A',
                 fontSize: '0.95rem',
                 outline: 'none',
                 transition: 'border-color 0.2s',
                 boxSizing: 'border-box'
               }}
-              onFocus={(e) => e.target.style.borderColor = '#0099ff'}
-              onBlur={(e) => e.target.style.borderColor = '#1f2937'}
+              onFocus={(e) => e.target.style.borderColor = '#2563EB'}
+              onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
             />
           </div>
 
@@ -140,22 +142,22 @@ export default function BootScreen({ onLogin }) {
             type="submit"
             disabled={loading}
             style={{
-              marginTop: '10px',
-              background: loading ? '#0033cc' : 'linear-gradient(90deg, #0044ff 0%, #0088ff 100%)',
+              marginTop: '8px',
+              background: loading ? '#3B82F6' : '#1E40AF',
               border: 'none',
-              borderRadius: '4px',
-              color: '#ffffff',
+              borderRadius: '6px',
+              color: '#FFFFFF',
               padding: '12px',
-              fontSize: '0.95rem',
+              fontSize: '0.92rem',
               fontWeight: '600',
-              letterSpacing: '1px',
+              letterSpacing: '0.5px',
               cursor: loading ? 'wait' : 'pointer',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '10px',
-              boxShadow: '0 4px 15px rgba(0, 100, 255, 0.3)',
-              transition: 'background 0.3s'
+              gap: '8px',
+              boxShadow: '0 2px 4px rgba(30, 64, 175, 0.2)',
+              transition: 'background 0.2s'
             }}
           >
             {loading ? 'AUTHENTICATING...' : (

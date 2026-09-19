@@ -13,13 +13,13 @@ export default function Card({
   const getStatusBorder = () => {
     switch (status) {
       case 'warning':
-        return 'rgba(245, 158, 11, 0.4)';
+        return '#F59E0B';
       case 'critical':
-        return 'rgba(239, 68, 68, 0.5)';
+        return '#EF4444';
       case 'nominal':
-        return 'rgba(16, 185, 129, 0.3)';
+        return '#10B981';
       default:
-        return 'rgba(30, 58, 102, 0.5)';
+        return '#E2E8F0';
     }
   };
 
@@ -27,9 +27,7 @@ export default function Card({
     <div
       className={`tactical-card ${className}`}
       style={{
-        background: 'rgba(13, 20, 36, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        background: '#FFFFFF',
         border: `1px solid ${getStatusBorder()}`,
         borderRadius: '8px',
         padding: '16px',
@@ -37,10 +35,10 @@ export default function Card({
         flexDirection: 'column',
         position: 'relative',
         boxShadow: status === 'critical'
-          ? '0 0 15px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+          ? '0 1px 3px rgba(239, 68, 68, 0.2), 0 0 0 1px #EF4444'
           : status === 'warning'
-          ? '0 0 15px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : '0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+            ? '0 1px 3px rgba(245, 158, 11, 0.2), 0 0 0 1px #F59E0B'
+            : '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
         overflow: 'hidden',
         ...style,
       }}
@@ -52,18 +50,18 @@ export default function Card({
             alignItems: 'center',
             justifyContent: 'space-between',
             marginBottom: '12px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            borderBottom: '1px solid #E2E8F0',
             paddingBottom: '8px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {Icon && <Icon size={16} color="var(--accent-cyan, #38bdf8)" />}
+            {Icon && <Icon size={16} color="#1E40AF" />}
             <div>
               <h3
                 style={{
                   fontSize: '0.85rem',
                   fontWeight: 600,
-                  color: '#e2e8f0',
+                  color: '#0F172A',
                   letterSpacing: '0.5px',
                   textTransform: 'uppercase',
                   margin: 0,
@@ -75,7 +73,7 @@ export default function Card({
                 {title}
               </h3>
               {subtitle && (
-                <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.7rem', color: '#64748B', marginTop: '2px' }}>
                   {subtitle}
                 </div>
               )}

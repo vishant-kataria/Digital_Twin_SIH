@@ -16,18 +16,14 @@ export default function CircularGauge({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-  let strokeColor = '#38bdf8';
-  let glowColor = 'rgba(56, 189, 248, 0.4)';
+  let strokeColor = '#1E40AF';
 
   if (percentage >= 85 || color === 'green') {
-    strokeColor = '#10b981';
-    glowColor = 'rgba(16, 185, 129, 0.4)';
+    strokeColor = '#16A34A';
   } else if (percentage >= 60 || color === 'amber') {
-    strokeColor = '#f59e0b';
-    glowColor = 'rgba(245, 158, 11, 0.4)';
+    strokeColor = '#D97706';
   } else {
-    strokeColor = '#ef4444';
-    glowColor = 'rgba(239, 68, 68, 0.5)';
+    strokeColor = '#DC2626';
   }
 
   return (
@@ -53,7 +49,7 @@ export default function CircularGauge({
           cy={size / 2}
           r={radius}
           fill="transparent"
-          stroke="rgba(255, 255, 255, 0.08)"
+          stroke="#E2E8F0"
           strokeWidth={strokeWidth}
         />
         {/* Progress track */}
@@ -69,7 +65,6 @@ export default function CircularGauge({
           strokeLinecap="round"
           style={{
             transition: 'stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.4s ease',
-            filter: `drop-shadow(0 0 6px ${glowColor})`,
           }}
         />
       </svg>
@@ -87,21 +82,21 @@ export default function CircularGauge({
       >
         <span
           style={{
-            fontSize: size > 120 ? '1.8rem' : '1.3rem',
+            fontSize: size > 120 ? '1.8rem' : '1.25rem',
             fontWeight: 700,
-            color: '#f8fafc',
+            color: '#0F172A',
             lineHeight: 1,
             fontFamily: '"JetBrains Mono", monospace',
           }}
         >
           {typeof value === 'number' ? value.toFixed(0) : value}
-          <span style={{ fontSize: '0.9rem', color: strokeColor, marginLeft: '2px' }}>{unit}</span>
+          <span style={{ fontSize: '0.85rem', color: strokeColor, marginLeft: '2px' }}>{unit}</span>
         </span>
         {label && (
           <span
             style={{
               fontSize: '0.68rem',
-              color: '#94a3b8',
+              color: '#64748B',
               marginTop: '4px',
               textTransform: 'uppercase',
               letterSpacing: '0.5px',

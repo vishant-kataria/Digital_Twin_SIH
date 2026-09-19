@@ -16,10 +16,10 @@ export default function FleetCommand({ onSelectDrone }) {
 
   const getStatusColor = (health) => {
     switch(health) {
-      case 'nominal': return 'var(--accent-green)';
-      case 'warning': return 'var(--accent-amber)';
-      case 'critical': return 'var(--accent-red)';
-      default: return 'var(--text-muted)';
+      case 'nominal': return '#15803D';
+      case 'warning': return '#D97706';
+      case 'critical': return '#DC2626';
+      default: return '#64748B';
     }
   };
 
@@ -31,54 +31,70 @@ export default function FleetCommand({ onSelectDrone }) {
   };
 
   return (
-    <div style={{ height: '100vh', width: '100vw', backgroundColor: '#0b0e14', display: 'flex', flexDirection: 'column', padding: '20px' }}>
+    <div style={{ height: '100vh', width: '100vw', backgroundColor: '#F8FAFC', display: 'flex', flexDirection: 'column', padding: '16px' }}>
       
       {/* HEADER */}
-      <header className="tactical-panel" style={{ padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <ShieldAlert color="var(--accent-cyan)" size={28} />
+      <header className="tactical-panel" style={{ padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ background: '#EFF6FF', padding: '8px', borderRadius: '8px' }}>
+            <ShieldAlert color="#1E40AF" size={26} />
+          </div>
           <div>
-            <h1 style={{ fontSize: '1.2rem', color: 'var(--text-main)', letterSpacing: '2px', textTransform: 'uppercase', margin: 0 }}>FLEET COMMAND OVERVIEW</h1>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>DRDO MALE UAV SQUADRON STATUS</div>
+            <h1 style={{ fontSize: '1.15rem', color: '#0F172A', letterSpacing: '1px', textTransform: 'uppercase', margin: 0, fontWeight: 700 }}>
+              Fleet Command Overview
+            </h1>
+            <div style={{ fontSize: '0.72rem', color: '#64748B' }}>DRDO MALE UAV SQUADRON STATUS</div>
           </div>
         </div>
         
-        <div style={{ display: 'flex', gap: '20px', fontFamily: '"JetBrains Mono", monospace' }}>
+        <div style={{ display: 'flex', gap: '24px', fontFamily: '"JetBrains Mono", monospace' }}>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>TOTAL ASSETS</div>
-            <div style={{ fontSize: '1.5rem', color: 'var(--text-main)' }}>{MOCK_FLEET.length}</div>
+            <div style={{ fontSize: '0.68rem', color: '#64748B' }}>TOTAL ASSETS</div>
+            <div style={{ fontSize: '1.4rem', color: '#0F172A', fontWeight: 700 }}>{MOCK_FLEET.length}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>AIRBORNE</div>
-            <div style={{ fontSize: '1.5rem', color: 'var(--accent-cyan)' }}>{MOCK_FLEET.filter(d => d.status === 'flying').length}</div>
+            <div style={{ fontSize: '0.68rem', color: '#64748B' }}>AIRBORNE</div>
+            <div style={{ fontSize: '1.4rem', color: '#1E40AF', fontWeight: 700 }}>{MOCK_FLEET.filter(d => d.status === 'flying').length}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>STATIONARY</div>
-            <div style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>{MOCK_FLEET.filter(d => d.status === 'stationary').length}</div>
+            <div style={{ fontSize: '0.68rem', color: '#64748B' }}>STATIONARY</div>
+            <div style={{ fontSize: '1.4rem', color: '#64748B', fontWeight: 700 }}>{MOCK_FLEET.filter(d => d.status === 'stationary').length}</div>
           </div>
         </div>
       </header>
 
       {/* TACTICAL MAP / GRID AREA */}
-      <main className="tactical-panel" style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+      <main className="tactical-panel" style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
         {/* Grid Background */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
+          backgroundImage: 'linear-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.15) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
         }}></div>
 
         {/* Center Radar Sweep */}
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          width: '800px', height: '800px', border: '1px solid rgba(0,240,255,0.1)', borderRadius: '50%',
+          width: '800px', height: '800px', border: '1px solid rgba(148, 163, 184, 0.35)', borderRadius: '50%',
         }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', width: '50%', height: '50%', borderBottom: '1px solid rgba(0,240,255,0.3)', borderLeft: '1px solid rgba(0,240,255,0.3)', transformOrigin: 'bottom left', animation: 'radar-sweep 4s linear infinite', background: 'linear-gradient(45deg, rgba(0,240,255,0.1) 0%, transparent 50%)' }}></div>
+          <div style={{
+            position: 'absolute', top: 0, left: '50%', width: '50%', height: '50%',
+            borderBottom: '1px solid rgba(30, 64, 175, 0.3)', borderLeft: '1px solid rgba(30, 64, 175, 0.3)',
+            transformOrigin: 'bottom left', animation: 'radar-sweep 5s linear infinite',
+            background: 'linear-gradient(45deg, rgba(30, 64, 175, 0.08) 0%, transparent 50%)'
+          }}></div>
         </div>
 
+        {/* Range ring 2 */}
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          width: '500px', height: '500px', border: '1px dashed rgba(148, 163, 184, 0.3)', borderRadius: '50%',
+          pointerEvents: 'none'
+        }} />
+
         {/* Base Area Marker */}
-        <div style={{ position: 'absolute', bottom: '5%', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '200px', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <span style={{ position: 'absolute', bottom: '-20px', fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: '"JetBrains Mono", monospace' }}>AIRBASE ALPHA</span>
+        <div style={{ position: 'absolute', bottom: '6%', left: '50%', transform: 'translateX(-50%)', width: '180px', height: '180px', border: '2px dashed rgba(148, 163, 184, 0.45)', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <span style={{ position: 'absolute', bottom: '-20px', fontSize: '0.68rem', color: '#64748B', fontFamily: '"JetBrains Mono", monospace', fontWeight: 600 }}>AIRBASE ALPHA</span>
         </div>
 
         {/* Render Drones */}
@@ -102,37 +118,43 @@ export default function FleetCommand({ onSelectDrone }) {
           >
             {/* Drone Marker */}
             <div style={{
-              width: '24px', height: '24px',
-              backgroundColor: drone.status === 'stationary' ? 'rgba(255,255,255,0.1)' : getStatusColor(drone.health),
-              border: `2px solid ${drone.status === 'stationary' ? 'var(--text-muted)' : getStatusColor(drone.health)}`,
+              width: '26px', height: '26px',
+              backgroundColor: '#FFFFFF',
+              border: `2px solid ${drone.status === 'stationary' ? '#94A3B8' : getStatusColor(drone.health)}`,
               borderRadius: '50%',
               display: 'flex', justifyContent: 'center', alignItems: 'center',
-              boxShadow: drone.status === 'flying' ? `0 0 15px ${getStatusColor(drone.health)}` : 'none',
+              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
               animation: getPulseAnimation(drone.health, drone.status === 'flying')
             }}>
-              {drone.status === 'flying' ? <Navigation size={12} color="#000" style={{ transform: 'rotate(45deg)' }} /> : <Plane size={12} color="var(--text-muted)" />}
+              {drone.status === 'flying' ? (
+                <Navigation size={13} color={getStatusColor(drone.health)} style={{ transform: 'rotate(45deg)' }} />
+              ) : (
+                <Plane size={13} color="#64748B" />
+              )}
             </div>
 
             {/* Label (Always visible for flying, hover for stationary) */}
             {(drone.status === 'flying' || hoveredDrone === drone.id) && (
-              <div className="tactical-panel" style={{
-                marginTop: '10px', padding: '5px 10px',
-                backgroundColor: 'rgba(11, 14, 20, 0.9)',
-                border: `1px solid ${getStatusColor(drone.health)}`,
+              <div style={{
+                marginTop: '8px', padding: '6px 10px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #CBD5E1',
+                borderRadius: '6px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                 fontFamily: '"JetBrains Mono", monospace',
                 whiteSpace: 'nowrap',
-                display: 'flex', flexDirection: 'column', gap: '3px'
+                display: 'flex', flexDirection: 'column', gap: '2px'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 'bold' }}>
-                  {drone.health === 'nominal' && <CheckCircle2 size={12} color="var(--accent-green)" />}
-                  {drone.health === 'warning' && <AlertTriangle size={12} color="var(--accent-amber)" />}
-                  {drone.health === 'critical' && <XCircle size={12} color="var(--accent-red)" />}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: '#0F172A', fontWeight: 'bold' }}>
+                  {drone.health === 'nominal' && <CheckCircle2 size={12} color="#15803D" />}
+                  {drone.health === 'warning' && <AlertTriangle size={12} color="#D97706" />}
+                  {drone.health === 'critical' && <XCircle size={12} color="#DC2626" />}
                   {drone.id}
                 </div>
                 {drone.status === 'flying' && (
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
-                    ALT: {drone.alt} <br/>
-                    <span style={{ color: getStatusColor(drone.health) }}>
+                  <div style={{ fontSize: '0.65rem', color: '#64748B' }}>
+                    ALT: <strong style={{ color: '#0F172A' }}>{drone.alt}</strong> <br/>
+                    <span style={{ color: getStatusColor(drone.health), fontWeight: 600 }}>
                       {drone.health === 'nominal' ? 'SYSTEMS NOMINAL' : drone.health === 'warning' ? 'CHECK REQUIRED' : 'LAND IMMEDIATELY'}
                     </span>
                   </div>
@@ -144,9 +166,9 @@ export default function FleetCommand({ onSelectDrone }) {
 
         <style>{`
           @keyframes radar-sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-          @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 255, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); } }
-          @keyframes pulse-amber { 0% { box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(255, 179, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 179, 0, 0); } }
-          @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.9); } 70% { box-shadow: 0 0 0 25px rgba(255, 51, 51, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); } }
+          @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4); } 70% { box-shadow: 0 0 0 14px rgba(21, 128, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); } }
+          @keyframes pulse-amber { 0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); } 70% { box-shadow: 0 0 0 16px rgba(217, 119, 6, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); } }
+          @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); } 70% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
         `}</style>
       </main>
 

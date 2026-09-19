@@ -52,7 +52,7 @@ export default function Engine3DView({ telemetry }) {
     // 1. Scene Setup
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0x0a1020);
+    scene.background = new THREE.Color(0xF8FAFC);
 
     // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
@@ -70,47 +70,86 @@ export default function Engine3DView({ telemetry }) {
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // 4. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    // 4. Lighting Setup (Aeronautical Studio Lighting with Balanced Fill)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.25);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0x38bdf8, 1.4);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.4);
     dirLight1.position.set(12, 16, 12);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 0.9);
-    dirLight2.position.set(-12, -8, -10);
+    const dirLight2 = new THREE.DirectionalLight(0xdbeafe, 1.0);
+    dirLight2.position.set(-14, 10, 12);
     scene.add(dirLight2);
 
-    const pointLight = new THREE.PointLight(0x38bdf8, 2, 25);
-    pointLight.position.set(0, 3, 0);
-    scene.add(pointLight);
+    const groundLight = new THREE.DirectionalLight(0xf1f5f9, 0.7);
+    groundLight.position.set(0, -10, 0);
+    scene.add(groundLight);
+
+    const rimLight = new THREE.DirectionalLight(0x93c5fd, 0.6);
+    rimLight.position.set(0, 10, -12);
+    scene.add(rimLight);
 
     // Grid Floor
-    const gridHelper = new THREE.GridHelper(20, 24, 0x0284c7, 0x1e293b);
+    const gridHelper = new THREE.GridHelper(22, 26, 0x94a3b8, 0xe2e8f0);
     gridHelper.position.y = -2.8;
     scene.add(gridHelper);
+
+    // Ground Contact Shadow
+    const shadowGeo = new THREE.PlaneGeometry(7, 7);
+    shadowGeo.rotateX(-Math.PI / 2);
+    const shadowCanvas = document.createElement('canvas');
+    shadowCanvas.width = 128;
+    shadowCanvas.height = 128;
+    const sCtx = shadowCanvas.getContext('2d');
+    const radGrad = sCtx.createRadialGradient(64, 64, 10, 64, 64, 60);
+    radGrad.addColorStop(0, 'rgba(15, 23, 42, 0.2)');
+    radGrad.addColorStop(0.6, 'rgba(15, 23, 42, 0.06)');
+    radGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+    sCtx.fillStyle = radGrad;
+    sCtx.fillRect(0, 0, 128, 128);
+    const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+    const shadowMat = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false });
+    const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+    shadowMesh.position.y = -2.78;
+    scene.add(shadowMesh);
 
     // 5. Construct Aero Piston Engine 3D Geometries
     const engineGroup = new THREE.Group();
     engineGroupRef.current = engineGroup;
     scene.add(engineGroup);
 
-    // --- Base Materials ---
+    // --- Base Materials (Titanium & Brushed Steel CAD System) ---
+    // CNC Milled Mirror Chrome Cooling Fins & Fasteners
     const metalMaterial = new THREE.MeshStandardMaterial({
-      color: 0x1e293b,
-      metalness: 0.85,
-      roughness: 0.25,
+      color: 0xF1F5F9,
+      metalness: 0.96,
+      roughness: 0.08,
       wireframe: false,
     });
 
+    // Satin Bead-Blasted Aircraft Cast Aluminum (Crankcase Block)
     const crankcaseMat = new THREE.MeshStandardMaterial({
-      color: 0x0f172a,
-      metalness: 0.9,
-      roughness: 0.2,
+      color: 0xCBD5E1,
+      metalness: 0.85,
+      roughness: 0.22,
       wireframe: false,
     });
     materialsRef.current.crankcase = crankcaseMat;
+
+    // Machined Titanium Nose Casing / Gearbox Collar
+    const collarMat = new THREE.MeshStandardMaterial({
+      color: 0x64748B,
+      metalness: 0.88,
+      roughness: 0.2,
+    });
+
+    // Matte Tungsten Graphite Valve Cover Plates
+    const rockerMat = new THREE.MeshStandardMaterial({
+      color: 0x334155,
+      metalness: 0.72,
+      roughness: 0.28,
+    });
 
     // --- Crankcase Body ---
     const crankcaseGeo = new THREE.BoxGeometry(2.4, 2.2, 4.2);
@@ -119,6 +158,13 @@ export default function Engine3DView({ telemetry }) {
     crankcase.receiveShadow = true;
     crankcase.name = "Crankcase Assembly";
     engineGroup.add(crankcase);
+
+    // Front Nose Collar / Reduction Gearbox Casing
+    const noseGeo = new THREE.CylinderGeometry(0.75, 0.95, 0.6, 28);
+    noseGeo.rotateX(Math.PI / 2);
+    const nose = new THREE.Mesh(noseGeo, collarMat);
+    nose.position.set(0, 0, 2.2);
+    engineGroup.add(nose);
 
     // --- 4 Horizontally Opposed Cylinders (Rotax 914 Layout) ---
     const cylinderPositions = [
@@ -145,16 +191,16 @@ export default function Engine3DView({ telemetry }) {
         cylIdx: idx,
       };
 
-      // Cylinder Barrel
+      // Cylinder Barrel (Machined Cold-Rolled Titanium Steel)
       const barrelGeo = new THREE.CylinderGeometry(0.72, 0.72, 1.45, 28);
       barrelGeo.rotateZ(Math.PI / 2);
 
       const headMat = new THREE.MeshStandardMaterial({
-        color: 0x38bdf8,
-        emissive: 0x075985,
-        emissiveIntensity: 0.4,
-        roughness: 0.35,
-        metalness: 0.7,
+        color: 0x64748B,
+        emissive: 0x0F172A,
+        emissiveIntensity: 0.04,
+        roughness: 0.18,
+        metalness: 0.9,
       });
       materialsRef.current.heads.push(headMat);
 
@@ -163,7 +209,7 @@ export default function Engine3DView({ telemetry }) {
       barrel.name = `Cylinder ${idx + 1} Barrel`;
       cylGroup.add(barrel);
 
-      // Cooling Fins
+      // Cooling Fins (Mirror-polished aluminum rings)
       for (let f = -0.5; f <= 0.5; f += 0.18) {
         const finGeo = new THREE.CylinderGeometry(0.88, 0.88, 0.04, 28);
         finGeo.rotateZ(Math.PI / 2);
@@ -172,24 +218,36 @@ export default function Engine3DView({ telemetry }) {
         cylGroup.add(fin);
       }
 
-      // Cylinder Head
+      // Cylinder Head Main Body
       const headGeo = new THREE.BoxGeometry(0.65, 1.55, 1.55);
       const head = new THREE.Mesh(headGeo, headMat);
       head.position.x = pos.x > 0 ? 0.95 : -0.95;
       head.name = `Cylinder Head ${idx + 1}`;
       cylGroup.add(head);
 
-      // Spark Plug
+      // Rocker / Valve Cover Plate (Tungsten Graphite contrast)
+      const rockerGeo = new THREE.BoxGeometry(0.08, 1.35, 1.35);
+      const rocker = new THREE.Mesh(rockerGeo, rockerMat);
+      rocker.position.x = pos.x > 0 ? 1.32 : -1.32;
+      cylGroup.add(rocker);
+
+      // Chrome Center Fastener / Logo Plate
+      const plateGeo = new THREE.BoxGeometry(0.04, 0.45, 0.7);
+      const plate = new THREE.Mesh(plateGeo, metalMaterial);
+      plate.position.x = pos.x > 0 ? 1.38 : -1.38;
+      cylGroup.add(plate);
+
+      // Spark Plug (White ceramic insulator with bronze electrode)
       const plugGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.5, 14);
-      const plugMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9 });
+      const plugMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, metalness: 0.4, roughness: 0.3 });
       const plug = new THREE.Mesh(plugGeo, plugMat);
       plug.position.set(pos.x > 0 ? 1.25 : -1.25, 0.85, 0);
       cylGroup.add(plug);
 
-      // Internal Piston
+      // Internal Piston (Gleaming forged aluminum)
       const pistonGeo = new THREE.CylinderGeometry(0.66, 0.66, 0.65, 24);
       pistonGeo.rotateZ(Math.PI / 2);
-      const pistonMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.95, roughness: 0.15 });
+      const pistonMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, metalness: 0.96, roughness: 0.08 });
       const piston = new THREE.Mesh(pistonGeo, pistonMat);
       piston.userData = { cylIdx: idx };
       pistonsGroupRef.current.push(piston);
@@ -199,11 +257,27 @@ export default function Engine3DView({ telemetry }) {
       cylindersGroupRef.current.push(cylGroup);
     });
 
-    // --- Exhaust Manifold System ---
+    // --- Top Intake Manifold Pipes (Surgical Stainless) ---
+    const intakeMat = new THREE.MeshStandardMaterial({
+      color: 0xE2E8F0,
+      metalness: 0.92,
+      roughness: 0.14,
+    });
+    const intakeGroup = new THREE.Group();
+    [-1.1, 1.1].forEach((z) => {
+      const pipeGeo = new THREE.CylinderGeometry(0.14, 0.14, 3.8, 16);
+      pipeGeo.rotateZ(Math.PI / 2);
+      const pipe = new THREE.Mesh(pipeGeo, intakeMat);
+      pipe.position.set(0, 1.05, z);
+      intakeGroup.add(pipe);
+    });
+    engineGroup.add(intakeGroup);
+
+    // --- Exhaust Manifold System (Heat-treated surgical stainless) ---
     const exhaustMat = new THREE.MeshStandardMaterial({
-      color: 0x334155,
+      color: 0x64748B,
       metalness: 0.85,
-      roughness: 0.45,
+      roughness: 0.3,
     });
     materialsRef.current.exhaust = exhaustMat;
 
@@ -222,27 +296,34 @@ export default function Engine3DView({ telemetry }) {
     propGroup.position.set(0, 0, 2.4);
     propGroupRef.current = propGroup;
 
-    // Spinner Hub
+    // Spinner Hub (Polished chrome alloy)
     const hubGeo = new THREE.ConeGeometry(0.65, 1.3, 28);
     hubGeo.rotateX(Math.PI / 2);
-    const hubMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.9, roughness: 0.1 });
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0xCBD5E1, metalness: 0.92, roughness: 0.12 });
     const hub = new THREE.Mesh(hubGeo, hubMat);
     propGroup.add(hub);
 
-    // 2 Propeller Blades
+    // 2 Propeller Blades (Matte carbon graphite with white and orange safety tips)
     [-1, 1].forEach((dir) => {
       const bladeGeo = new THREE.BoxGeometry(0.22, 3.4, 0.08);
-      const bladeMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.6 });
+      const bladeMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4, metalness: 0.3 });
       const blade = new THREE.Mesh(bladeGeo, bladeMat);
       blade.position.set(0, dir * 1.7, 0);
       blade.rotation.z = dir * 0.1;
       propGroup.add(blade);
 
-      // Yellow Blade Tip
-      const tipGeo = new THREE.BoxGeometry(0.24, 0.45, 0.09);
-      const tipMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+      // Safety White Stripe
+      const stripeGeo = new THREE.BoxGeometry(0.23, 0.25, 0.085);
+      const stripeMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.2 });
+      const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+      stripe.position.set(0, dir * 2.85, 0);
+      propGroup.add(stripe);
+
+      // Safety Orange Blade Tip
+      const tipGeo = new THREE.BoxGeometry(0.24, 0.4, 0.09);
+      const tipMat = new THREE.MeshStandardMaterial({ color: 0xF97316, roughness: 0.2 });
       const tip = new THREE.Mesh(tipGeo, tipMat);
-      tip.position.set(0, dir * 3.15, 0);
+      tip.position.set(0, dir * 3.18, 0);
       propGroup.add(tip);
     });
 
@@ -336,22 +417,22 @@ export default function Engine3DView({ telemetry }) {
           cylCht += 35; // Simulated Cyl 4 hotspot
         }
 
-        if (cylCht > 190 || isFault) {
-          // Critical Alert: Pulsing Neon Red
+        if (cylCht > 190 || (isFault && idx === 3)) {
+          // Critical Alert: Clean Aviation Red
           const pulse = (Math.sin(elapsedTime * 6) + 1) / 2;
-          mat.color.setHex(0xef4444);
-          mat.emissive.setHex(0x991b1b);
-          mat.emissiveIntensity = 0.5 + pulse * 0.5;
-        } else if (cylCht > 165) {
-          // Warning: Warm Amber
-          mat.color.setHex(0xf59e0b);
-          mat.emissive.setHex(0x78350f);
-          mat.emissiveIntensity = 0.4;
+          mat.color.setHex(0xEF4444);
+          mat.emissive.setHex(0xDC2626);
+          mat.emissiveIntensity = 0.35 + pulse * 0.35;
+        } else if (cylCht > 178) {
+          // Warning: Clean Aviation Amber
+          mat.color.setHex(0xF59E0B);
+          mat.emissive.setHex(0xD97706);
+          mat.emissiveIntensity = 0.22;
         } else {
-          // Normal: Tactical Cyan
-          mat.color.setHex(0x0ea5e9);
-          mat.emissive.setHex(0x0369a1);
-          mat.emissiveIntensity = 0.3;
+          // Nominal Cruise: Machined Cold-Rolled Titanium Steel CAD Finish
+          mat.color.setHex(0x64748B);
+          mat.emissive.setHex(0x0F172A);
+          mat.emissiveIntensity = 0.04;
         }
       });
 
@@ -420,7 +501,8 @@ export default function Engine3DView({ telemetry }) {
         flexDirection: 'column',
         borderRadius: '8px',
         overflow: 'hidden',
-        background: '#0a1020',
+        background: '#F8FAFC',
+        border: '1px solid #E2E8F0',
       }}
     >
       {/* Top Toolbar */}
@@ -437,22 +519,22 @@ export default function Engine3DView({ telemetry }) {
           pointerEvents: 'none',
         }}
       >
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.92)', padding: '6px 12px', borderRadius: '6px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
           <span
             style={{
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              backgroundColor: isOverheat ? '#ef4444' : '#10b981',
-              boxShadow: `0 0 8px ${isOverheat ? '#ef4444' : '#10b981'}`,
+              backgroundColor: isOverheat ? '#DC2626' : '#15803D',
+              boxShadow: `0 0 6px ${isOverheat ? 'rgba(220, 38, 38, 0.4)' : 'rgba(21, 128, 61, 0.4)'}`,
               display: 'inline-block',
             }}
           />
           <div>
-            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '0.5px' }}>
+            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', letterSpacing: '0.5px' }}>
               3D DIGITAL TWIN AERO ENGINE (ROTAX 914)
             </div>
-            <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748B' }}>
               Real-time WebGL Stress & Thermal Mapping
             </div>
           </div>
@@ -465,11 +547,11 @@ export default function Engine3DView({ telemetry }) {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(15, 23, 42, 0.75)',
-            backdropFilter: 'blur(8px)',
+            background: 'rgba(255, 255, 255, 0.92)',
             padding: '4px',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
           }}
         >
           <button
@@ -484,8 +566,8 @@ export default function Engine3DView({ telemetry }) {
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
-              background: autoRotate ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-              color: autoRotate ? '#38bdf8' : '#94a3b8',
+              background: autoRotate ? '#EFF6FF' : 'transparent',
+              color: autoRotate ? '#1E40AF' : '#64748B',
             }}
             title="Toggle Auto Spin"
           >
@@ -504,8 +586,8 @@ export default function Engine3DView({ telemetry }) {
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
-              background: wireframeMode ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-              color: wireframeMode ? '#38bdf8' : '#94a3b8',
+              background: wireframeMode ? '#EFF6FF' : 'transparent',
+              color: wireframeMode ? '#1E40AF' : '#64748B',
             }}
             title="Holographic Wireframe"
           >
@@ -524,8 +606,8 @@ export default function Engine3DView({ telemetry }) {
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
-              background: explodedView ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-              color: explodedView ? '#38bdf8' : '#94a3b8',
+              background: explodedView ? '#EFF6FF' : 'transparent',
+              color: explodedView ? '#1E40AF' : '#64748B',
             }}
             title="Deconstruct Engine Assembly"
           >
@@ -545,7 +627,7 @@ export default function Engine3DView({ telemetry }) {
               border: 'none',
               cursor: 'pointer',
               background: 'transparent',
-              color: '#94a3b8',
+              color: '#64748B',
             }}
             title="Reset Camera View"
           >
@@ -564,8 +646,8 @@ export default function Engine3DView({ telemetry }) {
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
-              background: showHotspots ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
-              color: showHotspots ? '#34d399' : '#94a3b8',
+              background: showHotspots ? '#F0FDF4' : 'transparent',
+              color: showHotspots ? '#15803D' : '#64748B',
             }}
             title="Toggle Sensor Pins"
           >
@@ -586,7 +668,7 @@ export default function Engine3DView({ telemetry }) {
         }}
       />
 
-      {/* Interactive Sensor Hotspot Badges (matching reference quadrant 2) */}
+      {/* Interactive Sensor Hotspot Badges */}
       {showHotspots && (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
           {/* EGT Pin (Top-Left / Exhaust) */}
@@ -596,22 +678,22 @@ export default function Engine3DView({ telemetry }) {
               top: '22%',
               left: '18%',
               pointerEvents: 'auto',
-              background: 'rgba(239, 68, 68, 0.2)',
-              border: '1px solid rgba(239, 68, 68, 0.6)',
-              backdropFilter: 'blur(8px)',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderLeft: '3px solid #DC2626',
               borderRadius: '6px',
-              padding: '4px 10px',
+              padding: '5px 12px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 12px rgba(239, 68, 68, 0.3)',
+              gap: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
               transform: 'translate(-50%, -50%)',
             }}
           >
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }} />
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#DC2626' }} />
             <div>
-              <div style={{ fontSize: '0.62rem', color: '#fca5a5', fontWeight: 600 }}>EGT</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div style={{ fontSize: '0.62rem', color: '#DC2626', fontWeight: 700 }}>EGT</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0F172A', fontFamily: '"JetBrains Mono", monospace' }}>
                 {egtVal.toFixed(0)}°C
               </div>
             </div>
@@ -624,22 +706,22 @@ export default function Engine3DView({ telemetry }) {
               top: '26%',
               right: '18%',
               pointerEvents: 'auto',
-              background: isOverheat ? 'rgba(239, 68, 68, 0.25)' : 'rgba(56, 189, 248, 0.2)',
-              border: `1px solid ${isOverheat ? 'rgba(239, 68, 68, 0.7)' : 'rgba(56, 189, 248, 0.6)'}`,
-              backdropFilter: 'blur(8px)',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderLeft: `3px solid ${isOverheat ? '#DC2626' : '#1E40AF'}`,
               borderRadius: '6px',
-              padding: '4px 10px',
+              padding: '5px 12px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: isOverheat ? '0 0 12px rgba(239, 68, 68, 0.4)' : '0 0 12px rgba(56, 189, 248, 0.3)',
+              gap: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
               transform: 'translate(50%, -50%)',
             }}
           >
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isOverheat ? '#ef4444' : '#38bdf8' }} />
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isOverheat ? '#DC2626' : '#1E40AF' }} />
             <div>
-              <div style={{ fontSize: '0.62rem', color: isOverheat ? '#fca5a5' : '#7dd3fc', fontWeight: 600 }}>CHT (Avg)</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div style={{ fontSize: '0.62rem', color: isOverheat ? '#DC2626' : '#1E40AF', fontWeight: 700 }}>CHT (Avg)</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0F172A', fontFamily: '"JetBrains Mono", monospace' }}>
                 {chtVal.toFixed(1)}°C
               </div>
             </div>
@@ -652,22 +734,22 @@ export default function Engine3DView({ telemetry }) {
               top: '60%',
               right: '20%',
               pointerEvents: 'auto',
-              background: 'rgba(16, 185, 129, 0.2)',
-              border: '1px solid rgba(16, 185, 129, 0.6)',
-              backdropFilter: 'blur(8px)',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderLeft: '3px solid #15803D',
               borderRadius: '6px',
-              padding: '4px 10px',
+              padding: '5px 12px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 12px rgba(16, 185, 129, 0.3)',
+              gap: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
               transform: 'translate(50%, -50%)',
             }}
           >
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#15803D' }} />
             <div>
-              <div style={{ fontSize: '0.62rem', color: '#6ee7b7', fontWeight: 600 }}>Oil Temp</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div style={{ fontSize: '0.62rem', color: '#15803D', fontWeight: 700 }}>Oil Temp</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0F172A', fontFamily: '"JetBrains Mono", monospace' }}>
                 {oilTempVal.toFixed(0)}°C
               </div>
             </div>
@@ -680,22 +762,22 @@ export default function Engine3DView({ telemetry }) {
               bottom: '22%',
               left: '22%',
               pointerEvents: 'auto',
-              background: 'rgba(59, 130, 246, 0.2)',
-              border: '1px solid rgba(59, 130, 246, 0.6)',
-              backdropFilter: 'blur(8px)',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderLeft: '3px solid #0284C7',
               borderRadius: '6px',
-              padding: '4px 10px',
+              padding: '5px 12px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 12px rgba(59, 130, 246, 0.3)',
+              gap: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
               transform: 'translate(-50%, 50%)',
             }}
           >
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6' }} />
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0284C7' }} />
             <div>
-              <div style={{ fontSize: '0.62rem', color: '#93c5fd', fontWeight: 600 }}>Oil Pressure</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div style={{ fontSize: '0.62rem', color: '#0284C7', fontWeight: 700 }}>Oil Pressure</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0F172A', fontFamily: '"JetBrains Mono", monospace' }}>
                 {oilPressVal.toFixed(2)} bar
               </div>
             </div>
@@ -712,24 +794,24 @@ export default function Engine3DView({ telemetry }) {
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
-          background: 'rgba(15, 23, 42, 0.75)',
-          backdropFilter: 'blur(8px)',
+          background: 'rgba(255, 255, 255, 0.95)',
           padding: '6px 12px',
           borderRadius: '6px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
           zIndex: 10,
         }}
       >
-        <span style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 600 }}>THERMAL STRESS:</span>
+        <span style={{ fontSize: '0.65rem', color: '#475569', fontWeight: 700 }}>THERMAL STRESS:</span>
         <div
           style={{
             width: '100px',
             height: '6px',
             borderRadius: '3px',
-            background: 'linear-gradient(90deg, #0284c7 0%, #f59e0b 60%, #ef4444 100%)',
+            background: 'linear-gradient(90deg, #15803D 0%, #D97706 60%, #DC2626 100%)',
           }}
         />
-        <span style={{ fontSize: '0.62rem', color: '#64748b' }}>
+        <span style={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 500 }}>
           &lt;140°C Normal | &gt;165°C Warn | &gt;190°C Critical
         </span>
       </div>

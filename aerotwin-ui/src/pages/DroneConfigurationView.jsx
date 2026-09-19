@@ -351,8 +351,8 @@ export default function DroneConfigurationView({ drone, onBack }) {
         flexDirection: 'column',
         height: '100vh',
         width: '100vw',
-        background: '#070b14',
-        color: '#e2e8f0',
+        background: '#F8FAFC',
+        color: '#0F172A',
         overflow: 'hidden',
         fontFamily: '"Inter", sans-serif',
       }}
@@ -364,9 +364,8 @@ export default function DroneConfigurationView({ drone, onBack }) {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 20px',
-          background: 'rgba(11, 17, 32, 0.95)',
-          borderBottom: '1px solid rgba(30, 58, 102, 0.5)',
-          backdropFilter: 'blur(10px)',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #E2E8F0',
           zIndex: 20,
         }}
       >
@@ -378,9 +377,9 @@ export default function DroneConfigurationView({ drone, onBack }) {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-              color: '#38bdf8',
+              background: '#F8FAFC',
+              border: '1px solid #CBD5E1',
+              color: '#1E40AF',
               padding: '6px 12px',
               borderRadius: '6px',
               cursor: 'pointer',
@@ -399,19 +398,19 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 width: '38px',
                 height: '38px',
                 borderRadius: '8px',
-                background: 'linear-gradient(135deg, #0284c7, #0369a1)',
+                background: '#1E40AF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 12px rgba(56, 189, 248, 0.3)',
+                boxShadow: '0 2px 8px rgba(30, 64, 175, 0.25)',
               }}
             >
-              <Shield size={22} color="#ffffff" />
+              <Shield size={20} color="#FFFFFF" />
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h1 style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '1px', margin: 0, color: '#ffffff' }}>
+                <h1 style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '0.5px', margin: 0, color: '#0F172A' }}>
                   {currentDroneObj.id}
                 </h1>
                 <StatusBadge
@@ -419,10 +418,10 @@ export default function DroneConfigurationView({ drone, onBack }) {
                   label={aiAnalytics.severity === 'critical' ? 'CRITICAL' : aiAnalytics.severity === 'warning' ? 'WARNING' : 'OPERATIONAL'}
                 />
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'flex', gap: '12px' }}>
-                <span>Model: <strong style={{ color: '#cbd5e1' }}>{currentDroneObj.model}</strong></span>
-                <span>Squadron: <strong style={{ color: '#cbd5e1' }}>DRDO MALE UAV</strong></span>
-                <span>Mission: <strong style={{ color: '#38bdf8' }}>{currentDroneObj.mission}</strong></span>
+              <div style={{ fontSize: '0.72rem', color: '#64748B', display: 'flex', gap: '12px' }}>
+                <span>Model: <strong style={{ color: '#334155' }}>{currentDroneObj.model}</strong></span>
+                <span>Squadron: <strong style={{ color: '#334155' }}>DRDO MALE UAV</strong></span>
+                <span>Mission: <strong style={{ color: '#1E40AF' }}>{currentDroneObj.mission}</strong></span>
               </div>
             </div>
           </div>
@@ -430,14 +429,14 @@ export default function DroneConfigurationView({ drone, onBack }) {
 
         {/* Center: Drone Switcher */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Select Asset:</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 500 }}>Select Asset:</span>
           <select
             value={selectedDroneId}
             onChange={(e) => setSelectedDroneId(e.target.value)}
             style={{
-              background: '#0f172a',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-              color: '#f8fafc',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              color: '#0F172A',
               padding: '6px 12px',
               borderRadius: '6px',
               fontSize: '0.8rem',
@@ -457,19 +456,19 @@ export default function DroneConfigurationView({ drone, onBack }) {
         {/* Right: Telemetry & Mission Clock */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.68rem', color: '#94a3b8', letterSpacing: '0.5px' }}>MISSION TIME (IST)</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#38bdf8', fontFamily: '"JetBrains Mono", monospace' }}>
+            <div style={{ fontSize: '0.68rem', color: '#64748B', letterSpacing: '0.5px' }}>MISSION TIME (IST)</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#1E40AF', fontFamily: '"JetBrains Mono", monospace' }}>
               {currentTime}
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Radio size={18} color="#10b981" />
+            <Radio size={18} color="#15803D" />
             <div>
-              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#34d399', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#15803D', letterSpacing: '0.5px' }}>
                 DATA LINK: SECURE
               </div>
-              <div style={{ fontSize: '0.65rem', color: wsConnected ? '#38bdf8' : '#94a3b8' }}>
+              <div style={{ fontSize: '0.65rem', color: wsConnected ? '#1E40AF' : '#64748B' }}>
                 {wsConnected ? 'WebSocket 10Hz (Python AI Active)' : '10Hz Real-Time Simulation Engine'}
               </div>
             </div>
@@ -483,9 +482,9 @@ export default function DroneConfigurationView({ drone, onBack }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '6px 20px',
-          background: 'rgba(15, 23, 42, 0.8)',
-          borderBottom: '1px solid rgba(30, 58, 102, 0.3)',
+          padding: '4px 20px',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #E2E8F0',
         }}
       >
         <div style={{ display: 'flex', gap: '6px' }}>
@@ -511,9 +510,9 @@ export default function DroneConfigurationView({ drone, onBack }) {
                   borderRadius: '6px',
                   border: 'none',
                   cursor: 'pointer',
-                  backgroundColor: isActive ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-                  color: isActive ? '#38bdf8' : '#94a3b8',
-                  borderBottom: isActive ? '2px solid #38bdf8' : '2px solid transparent',
+                  backgroundColor: isActive ? '#EFF6FF' : 'transparent',
+                  color: isActive ? '#1E40AF' : '#64748B',
+                  borderBottom: isActive ? '2px solid #1E40AF' : '2px solid transparent',
                   transition: 'all 0.15s ease',
                 }}
               >
@@ -532,10 +531,10 @@ export default function DroneConfigurationView({ drone, onBack }) {
               gap: '8px',
               padding: '4px 12px',
               borderRadius: '6px',
-              background: aiAnalytics.severity === 'critical' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-              border: `1px solid ${aiAnalytics.severity === 'critical' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
+              background: aiAnalytics.severity === 'critical' ? '#FEF2F2' : '#FFFBEB',
+              border: `1px solid ${aiAnalytics.severity === 'critical' ? '#FECACA' : '#FDE68A'}`,
               fontSize: '0.72rem',
-              color: aiAnalytics.severity === 'critical' ? '#f87171' : '#fbbf24',
+              color: aiAnalytics.severity === 'critical' ? '#B91C1C' : '#B45309',
               fontWeight: 600,
             }}
           >
@@ -550,7 +549,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
         style={{
           flex: 1,
           display: 'grid',
-          gridTemplateColumns: '260px 1fr 310px',
+          gridTemplateColumns: '270px 1fr 320px',
           gap: '12px',
           padding: '12px 20px',
           overflow: 'hidden',
@@ -563,13 +562,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
           icon={Activity}
           style={{ height: '100%', overflowY: 'auto' }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {/* RPM */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '8px 10px', borderRadius: '6px' }}>
+            <div style={{ background: '#F8FAFC', padding: '8px 10px', borderRadius: '6px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>RPM</span>
+                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>RPM</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                  <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.9rem', fontWeight: 700, color: '#0F172A' }}>
                     {telemetry.rpm}
                   </span>
                   <StatusBadge status={telemetry.rpm > 4500 ? 'warning' : 'nominal'} label={telemetry.rpm > 4500 ? 'High' : 'Normal'} />
@@ -579,13 +578,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* Oil Pressure */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Oil Pressure</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 3.5 - 5.0 bar</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Oil Pressure</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 3.5 - 5.0 bar</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.oilPress.toFixed(2)} bar
                 </span>
                 <StatusBadge status={telemetry.oilPress < 2.5 ? 'critical' : 'nominal'} />
@@ -593,13 +592,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* Oil Temp */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Oil Temperature</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 70 - 95 °C</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Oil Temperature</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 70 - 95 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.oilTemp.toFixed(1)} °C
                 </span>
                 <StatusBadge status={telemetry.oilTemp > 100 ? 'warning' : 'nominal'} />
@@ -607,13 +606,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* CHT (Avg) */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>CHT (Avg)</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Limit: &lt; 180 °C</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>CHT (Avg)</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Limit: &lt; 180 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600, color: telemetry.cht > 180 ? '#ef4444' : '#f8fafc' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.cht > 180 ? '#DC2626' : '#0F172A' }}>
                   {telemetry.cht.toFixed(1)} °C
                 </span>
                 <StatusBadge status={telemetry.cht > 190 ? 'critical' : telemetry.cht > 170 ? 'warning' : 'nominal'} />
@@ -621,13 +620,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* EGT (Avg) */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>EGT (Avg)</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 650 - 800 °C</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>EGT (Avg)</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 650 - 800 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.egt.toFixed(0)} °C
                 </span>
                 <StatusBadge status="nominal" />
@@ -635,13 +634,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* Fuel Flow */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Fuel Flow</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 14 - 24 L/h</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Fuel Flow</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 14 - 24 L/h</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.fuelFlow.toFixed(1)} L/h
                 </span>
                 <StatusBadge status="nominal" />
@@ -649,13 +648,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* Vibration */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Vibration</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Limit: &lt; 3.0 mm/s</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Vibration</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Limit: &lt; 3.0 mm/s</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.vibration.toFixed(1)} mm/s
                 </span>
                 <StatusBadge status={telemetry.vibration > 3.0 ? 'warning' : 'nominal'} />
@@ -663,13 +662,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
             </div>
 
             {/* Battery Voltage */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px', borderBottom: '1px solid #F1F5F9' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Battery Voltage</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 28.0 V</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Battery Voltage</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 28.0 V</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.batteryVoltage.toFixed(1)} V
                 </span>
                 <StatusBadge status="nominal" />
@@ -679,11 +678,11 @@ export default function DroneConfigurationView({ drone, onBack }) {
             {/* Injection Timing */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 8px' }}>
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#cbd5e1' }}>Injection Timing</div>
-                <div style={{ fontSize: '0.65rem', color: '#64748b' }}>Nominal: 12.0° BTDC</div>
+                <div style={{ fontSize: '0.72rem', color: '#334155', fontWeight: 500 }}>Injection Timing</div>
+                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 12.0° BTDC</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 600 }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.injectionTiming.toFixed(1)}° BTDC
                 </span>
                 <StatusBadge status="nominal" />
@@ -696,7 +695,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
           {/* TAB 1: 3D DIGITAL TWIN VIEW */}
           {activeTab === '3d' && (
-            <div style={{ flex: 1, position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ flex: 1, position: 'relative', borderRadius: '8px', overflow: 'hidden', border: '1px solid #E2E8F0' }}>
               <Engine3DView telemetry={telemetry} />
             </div>
           )}
@@ -714,12 +713,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                     value={selectedTrendMetric}
                     onChange={(e) => setSelectedTrendMetric(e.target.value)}
                     style={{
-                      background: '#0f172a',
-                      border: '1px solid rgba(56, 189, 248, 0.3)',
-                      color: '#f8fafc',
+                      background: '#FFFFFF',
+                      border: '1px solid #CBD5E1',
+                      color: '#0F172A',
                       padding: '4px 8px',
                       borderRadius: '4px',
                       fontSize: '0.75rem',
+                      fontWeight: 600,
                     }}
                   >
                     <option value="rpm">RPM (Rotations per Minute)</option>
@@ -731,19 +731,20 @@ export default function DroneConfigurationView({ drone, onBack }) {
                     <option value="vibration">Vibration (mm/s)</option>
                   </select>
 
-                  <div style={{ display: 'flex', background: '#0f172a', borderRadius: '4px', padding: '2px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <div style={{ display: 'flex', background: '#F1F5F9', borderRadius: '4px', padding: '2px', border: '1px solid #E2E8F0' }}>
                     {['Live 10Hz', '1h', '6h', '24h'].map((range) => (
                       <button
                         key={range}
                         onClick={() => setTrendTimeRange(range)}
                         style={{
-                          background: trendTimeRange === range ? '#0284c7' : 'transparent',
-                          color: trendTimeRange === range ? '#ffffff' : '#94a3b8',
+                          background: trendTimeRange === range ? '#1E40AF' : 'transparent',
+                          color: trendTimeRange === range ? '#FFFFFF' : '#64748B',
                           border: 'none',
                           padding: '2px 8px',
                           fontSize: '0.68rem',
                           borderRadius: '3px',
                           cursor: 'pointer',
+                          fontWeight: 600,
                         }}
                       >
                         {range}
@@ -758,26 +759,28 @@ export default function DroneConfigurationView({ drone, onBack }) {
                   <AreaChart data={telemetryHistory} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="metricGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="#2563EB" stopOpacity={0.25} />
+                        <stop offset="95%" stopColor="#2563EB" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" vertical={false} />
-                    <XAxis dataKey="time" stroke="#64748b" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#64748b" fontSize={11} tickLine={false} domain={['auto', 'auto']} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                    <XAxis dataKey="time" stroke="#64748B" fontSize={11} tickLine={false} />
+                    <YAxis stroke="#64748B" fontSize={11} tickLine={false} domain={['auto', 'auto']} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0b1120',
-                        border: '1px solid rgba(56, 189, 248, 0.3)',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #CBD5E1',
                         borderRadius: '6px',
                         fontSize: '0.75rem',
                         fontFamily: '"JetBrains Mono", monospace',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        color: '#0F172A',
                       }}
                     />
                     <Area
                       type="monotone"
                       dataKey={selectedTrendMetric}
-                      stroke="#38bdf8"
+                      stroke="#1E40AF"
                       strokeWidth={2.5}
                       fillOpacity={1}
                       fill="url(#metricGrad)"
@@ -794,7 +797,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <Card title="Sensor Parameters Matrix" subtitle="Complete physical sensor array readings" icon={Gauge} style={{ flex: 1, overflowY: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: '#94a3b8', textAlign: 'left' }}>
+                  <tr style={{ borderBottom: '1px solid #E2E8F0', color: '#64748B', textAlign: 'left' }}>
                     <th style={{ padding: '8px' }}>SENSOR</th>
                     <th style={{ padding: '8px' }}>READING</th>
                     <th style={{ padding: '8px' }}>NOMINAL BAND</th>
@@ -815,11 +818,11 @@ export default function DroneConfigurationView({ drone, onBack }) {
                     { name: 'Fuel Injection Timing', val: `${telemetry.injectionTiming.toFixed(1)}° BTDC`, range: '11.5 - 13.0° BTDC', dev: '+0.2%', status: 'nominal' },
                     { name: 'Flight Altitude', val: `${telemetry.altitude} ft`, range: '10,000 - 25,000 ft', dev: 'Cruise', status: 'nominal' },
                   ].map((row, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                      <td style={{ padding: '8px', fontWeight: 600, color: '#f8fafc' }}>{row.name}</td>
-                      <td style={{ padding: '8px', fontFamily: '"JetBrains Mono", monospace', color: '#38bdf8' }}>{row.val}</td>
-                      <td style={{ padding: '8px', color: '#94a3b8' }}>{row.range}</td>
-                      <td style={{ padding: '8px', fontFamily: '"JetBrains Mono", monospace', color: row.dev.startsWith('-') ? '#f59e0b' : '#34d399' }}>{row.dev}</td>
+                    <tr key={i} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                      <td style={{ padding: '8px', fontWeight: 600, color: '#0F172A' }}>{row.name}</td>
+                      <td style={{ padding: '8px', fontFamily: '"JetBrains Mono", monospace', color: '#1E40AF', fontWeight: 700 }}>{row.val}</td>
+                      <td style={{ padding: '8px', color: '#64748B' }}>{row.range}</td>
+                      <td style={{ padding: '8px', fontFamily: '"JetBrains Mono", monospace', color: row.dev.startsWith('-') ? '#B45309' : '#15803D', fontWeight: 600 }}>{row.dev}</td>
                       <td style={{ padding: '8px' }}>
                         <StatusBadge status={row.status} />
                       </td>
@@ -835,15 +838,15 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <Card title="Drone Configuration & AI Diagnostic Testing" subtitle="Operational settings and SIH thermodynamic fault injection" icon={Sliders} style={{ flex: 1, overflowY: 'auto' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 {/* Flight Operating Controls */}
-                <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <h4 style={{ fontSize: '0.8rem', color: '#38bdf8', marginBottom: '12px', textTransform: 'uppercase' }}>
+                <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <h4 style={{ fontSize: '0.8rem', color: '#1E40AF', marginBottom: '12px', textTransform: 'uppercase', fontWeight: 700 }}>
                     Flight Operational Envelope
                   </h4>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '6px' }}>
-                        <span>Throttle Position:</span>
-                        <span style={{ fontFamily: '"JetBrains Mono", monospace', color: '#38bdf8', fontWeight: 700 }}>{throttle}%</span>
+                        <span style={{ color: '#475569', fontWeight: 500 }}>Throttle Position:</span>
+                        <span style={{ fontFamily: '"JetBrains Mono", monospace', color: '#1E40AF', fontWeight: 700 }}>{throttle}%</span>
                       </div>
                       <input
                         type="range"
@@ -851,14 +854,14 @@ export default function DroneConfigurationView({ drone, onBack }) {
                         max="100"
                         value={throttle}
                         onChange={(e) => setThrottle(Number(e.target.value))}
-                        style={{ width: '100%', accentColor: '#38bdf8' }}
+                        style={{ width: '100%', accentColor: '#1E40AF' }}
                       />
                     </div>
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '6px' }}>
-                        <span>Cruise Altitude:</span>
-                        <span style={{ fontFamily: '"JetBrains Mono", monospace', color: '#38bdf8', fontWeight: 700 }}>{cruiseAltitude} ft</span>
+                        <span style={{ color: '#475569', fontWeight: 500 }}>Cruise Altitude:</span>
+                        <span style={{ fontFamily: '"JetBrains Mono", monospace', color: '#1E40AF', fontWeight: 700 }}>{cruiseAltitude} ft</span>
                       </div>
                       <input
                         type="range"
@@ -867,34 +870,35 @@ export default function DroneConfigurationView({ drone, onBack }) {
                         step="500"
                         value={cruiseAltitude}
                         onChange={(e) => setCruiseAltitude(Number(e.target.value))}
-                        style={{ width: '100%', accentColor: '#38bdf8' }}
+                        style={{ width: '100%', accentColor: '#1E40AF' }}
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* AI Fault Injection Tool */}
-                <div style={{ background: 'rgba(239, 68, 68, 0.04)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                <div style={{ background: '#FEF2F2', padding: '14px', borderRadius: '8px', border: '1px solid #FECACA' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                     <div>
-                      <h4 style={{ fontSize: '0.82rem', color: '#f87171', margin: 0, textTransform: 'uppercase' }}>
+                      <h4 style={{ fontSize: '0.82rem', color: '#B91C1C', margin: 0, textTransform: 'uppercase', fontWeight: 700 }}>
                         AI Fault Injection & Verification Sandbox
                       </h4>
-                      <p style={{ fontSize: '0.68rem', color: '#94a3b8', margin: '2px 0 0 0' }}>
+                      <p style={{ fontSize: '0.68rem', color: '#64748B', margin: '2px 0 0 0' }}>
                         Inject real SIH thermodynamic failure profiles to test AI model degradation detection & RUL countdown
                       </p>
                     </div>
                     <button
                       onClick={() => triggerFaultInjection(0)}
                       style={{
-                        background: '#059669',
-                        color: '#ffffff',
+                        background: '#15803D',
+                        color: '#FFFFFF',
                         border: 'none',
-                        padding: '4px 10px',
+                        padding: '5px 12px',
                         borderRadius: '4px',
-                        fontSize: '0.7rem',
+                        fontSize: '0.72rem',
                         fontWeight: 600,
                         cursor: 'pointer',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                       }}
                     >
                       Clear All / Reset Baseline
@@ -914,19 +918,20 @@ export default function DroneConfigurationView({ drone, onBack }) {
                         key={fault.code}
                         onClick={() => triggerFaultInjection(fault.code)}
                         style={{
-                          background: activeFault === fault.code ? 'rgba(239, 68, 68, 0.25)' : 'rgba(15, 23, 42, 0.6)',
-                          border: `1px solid ${activeFault === fault.code ? '#ef4444' : 'rgba(255, 255, 255, 0.1)'}`,
+                          background: activeFault === fault.code ? '#FEE2E2' : '#FFFFFF',
+                          border: `1px solid ${activeFault === fault.code ? '#EF4444' : '#E2E8F0'}`,
                           borderRadius: '6px',
                           padding: '10px',
                           textAlign: 'left',
                           cursor: 'pointer',
                           transition: 'all 0.2s',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                         }}
                       >
-                        <div style={{ fontSize: '0.75rem', fontWeight: 600, color: activeFault === fault.code ? '#fca5a5' : '#f8fafc' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: activeFault === fault.code ? '#B91C1C' : '#0F172A' }}>
                           #{fault.code} {fault.title}
                         </div>
-                        <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '2px' }}>
+                        <div style={{ fontSize: '0.65rem', color: '#64748B', marginTop: '2px' }}>
                           {fault.desc}
                         </div>
                       </button>
@@ -949,11 +954,11 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <div
               style={{
                 background: aiAnalytics.severity === 'critical'
-                  ? 'rgba(239, 68, 68, 0.15)'
+                  ? '#FEF2F2'
                   : aiAnalytics.severity === 'warning'
-                  ? 'rgba(245, 158, 11, 0.15)'
-                  : 'rgba(16, 185, 129, 0.15)',
-                border: `1px solid ${aiAnalytics.severity === 'critical' ? 'rgba(239, 68, 68, 0.4)' : aiAnalytics.severity === 'warning' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
+                    ? '#FFFBEB'
+                    : '#F0FDF4',
+                border: `1px solid ${aiAnalytics.severity === 'critical' ? '#FECACA' : aiAnalytics.severity === 'warning' ? '#FDE68A' : '#BBF7D0'}`,
                 padding: '10px',
                 borderRadius: '6px',
                 marginBottom: '10px',
@@ -961,7 +966,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
             >
               <div
                 style={{
-                  color: aiAnalytics.severity === 'critical' ? '#ef4444' : aiAnalytics.severity === 'warning' ? '#f59e0b' : '#10b981',
+                  color: aiAnalytics.severity === 'critical' ? '#B91C1C' : aiAnalytics.severity === 'warning' ? '#B45309' : '#15803D',
                   fontSize: '0.78rem',
                   fontWeight: 700,
                   marginBottom: '4px',
@@ -973,26 +978,26 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <AlertTriangle size={14} />
                 {aiAnalytics.severity === 'critical' ? 'CRITICAL: IMMINENT FAILURE' : aiAnalytics.severity === 'warning' ? 'WARNING: DEGRADATION DETECTED' : 'SYSTEMS NOMINAL'}
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#cbd5e1', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.7rem', color: '#475569', lineHeight: 1.4 }}>
                 {aiAnalytics.anomalyMessage}
               </div>
             </div>
 
             {/* RUL Display */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #E2E8F0' }}>
               <div>
-                <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase' }}>Remaining Useful Life</div>
-                <div style={{ fontSize: '1.9rem', fontWeight: 800, color: aiAnalytics.rulHours < 50 ? '#ef4444' : '#f59e0b', fontFamily: '"JetBrains Mono", monospace' }}>
-                  {aiAnalytics.rulHours.toFixed(1)} <span style={{ fontSize: '1rem', color: '#94a3b8' }}>H</span>
+                <div style={{ fontSize: '0.68rem', color: '#64748B', textTransform: 'uppercase', fontWeight: 600 }}>Remaining Useful Life</div>
+                <div style={{ fontSize: '1.9rem', fontWeight: 800, color: aiAnalytics.rulHours < 50 ? '#DC2626' : '#B45309', fontFamily: '"JetBrains Mono", monospace' }}>
+                  {aiAnalytics.rulHours.toFixed(1)} <span style={{ fontSize: '1rem', color: '#64748B' }}>H</span>
                 </div>
-                <div style={{ fontSize: '0.68rem', color: '#38bdf8' }}>AI Confidence: {aiAnalytics.confidence}%</div>
+                <div style={{ fontSize: '0.68rem', color: '#0284C7', fontWeight: 600 }}>AI Confidence: {aiAnalytics.confidence}%</div>
               </div>
               <CircularGauge value={aiAnalytics.rulHours} max={500} size={76} strokeWidth={6} showStatusDot={false} label="" unit="h" />
             </div>
 
             {/* System Health Scores */}
             <div style={{ marginTop: '12px' }}>
-              <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.7rem', color: '#64748B', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 600 }}>
                 Subsystem Health Indicators
               </div>
               <LinearProgressBar label="Combustion Stability" value={aiAnalytics.combustionStability} color={aiAnalytics.combustionStability > 85 ? 'green' : 'amber'} />
@@ -1007,14 +1012,14 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <div style={{ width: '100%', height: '80px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={telemetryHistory.slice(-20)}>
-                  <Line type="monotone" dataKey="cht" stroke="#38bdf8" strokeWidth={2} dot={false} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="egt" stroke="#f59e0b" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="cht" stroke="#1E40AF" strokeWidth={2} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="egt" stroke="#D97706" strokeWidth={1.5} dot={false} isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>
-              <span style={{ color: '#38bdf8' }}>● CHT: {telemetry.cht.toFixed(1)}°C</span>
-              <span style={{ color: '#f59e0b' }}>● EGT: {telemetry.egt.toFixed(0)}°C</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#64748B', marginTop: '4px', fontWeight: 600 }}>
+              <span style={{ color: '#1E40AF' }}>● CHT: {telemetry.cht.toFixed(1)}°C</span>
+              <span style={{ color: '#D97706' }}>● EGT: {telemetry.egt.toFixed(0)}°C</span>
             </div>
           </Card>
         </div>
@@ -1025,8 +1030,8 @@ export default function DroneConfigurationView({ drone, onBack }) {
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          background: 'rgba(11, 17, 32, 0.95)',
-          borderTop: '1px solid rgba(30, 58, 102, 0.5)',
+          background: '#FFFFFF',
+          borderTop: '1px solid #E2E8F0',
           maxHeight: '110px',
           padding: '8px 20px',
           gap: '16px',
@@ -1034,35 +1039,35 @@ export default function DroneConfigurationView({ drone, onBack }) {
         }}
       >
         {/* Tactical Mission Overlay */}
-        <div style={{ borderRight: '1px solid rgba(255, 255, 255, 0.08)', paddingRight: '16px' }}>
+        <div style={{ borderRight: '1px solid #E2E8F0', paddingRight: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <MapPin size={13} color="#38bdf8" />
-            <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#f8fafc', textTransform: 'uppercase' }}>
+            <MapPin size={13} color="#1E40AF" />
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0F172A', textTransform: 'uppercase' }}>
               Mission Tactical Overlay
             </span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', fontSize: '0.7rem' }}>
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '4px 6px', borderRadius: '4px' }}>
-              <span style={{ color: '#94a3b8', display: 'block' }}>ALTITUDE</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#38bdf8' }}>
+            <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
+              <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>ALTITUDE</span>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#1E40AF' }}>
                 {telemetry.altitude.toLocaleString()} FT
               </span>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '4px 6px', borderRadius: '4px' }}>
-              <span style={{ color: '#94a3b8', display: 'block' }}>AIRSPEED</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#f8fafc' }}>
+            <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
+              <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>AIRSPEED</span>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#0F172A' }}>
                 142 KTS
               </span>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '4px 6px', borderRadius: '4px' }}>
-              <span style={{ color: '#94a3b8', display: 'block' }}>FUEL REMAINING</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#34d399' }}>
+            <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
+              <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>FUEL REMAINING</span>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#15803D' }}>
                 68%
               </span>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '4px 6px', borderRadius: '4px' }}>
-              <span style={{ color: '#94a3b8', display: 'block' }}>COORDINATES</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 600, color: '#cbd5e1' }}>
+            <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
+              <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>COORDINATES</span>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 600, color: '#334155' }}>
                 23.41°N, 72.56°E
               </span>
             </div>
@@ -1072,8 +1077,8 @@ export default function DroneConfigurationView({ drone, onBack }) {
         {/* Secure AI Event Log */}
         <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <Terminal size={13} color="#10b981" />
-            <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#f8fafc', textTransform: 'uppercase' }}>
+            <Terminal size={13} color="#15803D" />
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0F172A', textTransform: 'uppercase' }}>
               Secure AI Event Log
             </span>
           </div>
@@ -1083,7 +1088,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
               overflowY: 'auto',
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: '0.65rem',
-              color: '#94a3b8',
+              color: '#64748B',
               display: 'flex',
               flexDirection: 'column',
               gap: '2px',
@@ -1091,10 +1096,11 @@ export default function DroneConfigurationView({ drone, onBack }) {
           >
             {eventLogs.map((log) => (
               <div key={log.id} style={{ display: 'flex', gap: '6px' }}>
-                <span style={{ color: '#38bdf8' }}>[{log.time}]</span>
+                <span style={{ color: '#1E40AF', fontWeight: 600 }}>[{log.time}]</span>
                 <span
                   style={{
-                    color: log.type === 'critical' ? '#ef4444' : log.type === 'warning' ? '#f59e0b' : log.type === 'success' ? '#34d399' : '#cbd5e1',
+                    color: log.type === 'critical' ? '#B91C1C' : log.type === 'warning' ? '#B45309' : log.type === 'success' ? '#15803D' : '#334155',
+                    fontWeight: 500,
                   }}
                 >
                   {log.text}

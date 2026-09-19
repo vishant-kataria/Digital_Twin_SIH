@@ -6,32 +6,27 @@ export default function LinearProgressBar({
   max = 100,
   unit = '%',
   color = 'cyan', // 'cyan' | 'green' | 'amber' | 'red' | 'blue'
-  height = 8,
+  height = 7,
   showLabel = true,
   showValue = true,
   status,
 }) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
-  let gradient = 'linear-gradient(90deg, #0284c7, #38bdf8)';
-  let glowColor = 'rgba(56, 189, 248, 0.4)';
+  let gradient = 'linear-gradient(90deg, #1E40AF, #2563EB)';
 
   if (color === 'green' || status === 'nominal' || status === 'normal') {
-    gradient = 'linear-gradient(90deg, #059669, #10b981)';
-    glowColor = 'rgba(16, 185, 129, 0.4)';
+    gradient = 'linear-gradient(90deg, #15803D, #16A34A)';
   } else if (color === 'amber' || status === 'warning') {
-    gradient = 'linear-gradient(90deg, #d97706, #f59e0b)';
-    glowColor = 'rgba(245, 158, 11, 0.4)';
+    gradient = 'linear-gradient(90deg, #B45309, #D97706)';
   } else if (color === 'red' || status === 'critical') {
-    gradient = 'linear-gradient(90deg, #dc2626, #ef4444)';
-    glowColor = 'rgba(239, 68, 68, 0.4)';
+    gradient = 'linear-gradient(90deg, #B91C1C, #DC2626)';
   } else if (color === 'emerald') {
-    gradient = 'linear-gradient(90deg, #047857, #34d399)';
-    glowColor = 'rgba(52, 211, 153, 0.4)';
+    gradient = 'linear-gradient(90deg, #047857, #10B981)';
   }
 
   return (
-    <div style={{ width: '100%', marginBottom: '10px' }}>
+    <div style={{ width: '100%', marginBottom: '8px' }}>
       {(showLabel || showValue) && (
         <div
           style={{
@@ -43,14 +38,14 @@ export default function LinearProgressBar({
           }}
         >
           {showLabel && (
-            <span style={{ color: '#cbd5e1', fontWeight: 500 }}>{label}</span>
+            <span style={{ color: '#475569', fontWeight: 500 }}>{label}</span>
           )}
           {showValue && (
             <span
               style={{
                 fontFamily: '"JetBrains Mono", monospace',
                 fontWeight: 600,
-                color: '#f8fafc',
+                color: '#0F172A',
               }}
             >
               {typeof value === 'number' ? value.toFixed(0) : value}
@@ -63,7 +58,7 @@ export default function LinearProgressBar({
         style={{
           width: '100%',
           height: `${height}px`,
-          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+          backgroundColor: '#E2E8F0',
           borderRadius: '999px',
           overflow: 'hidden',
           position: 'relative',
@@ -75,7 +70,6 @@ export default function LinearProgressBar({
             height: '100%',
             background: gradient,
             borderRadius: '999px',
-            boxShadow: `0 0 10px ${glowColor}`,
             transition: 'width 0.4s ease, background 0.3s ease',
           }}
         />
