@@ -33,7 +33,8 @@ const INITIAL_FLEET = [
 
 export default function FleetCommand({ onSelectDrone }) {
   const [hoveredDrone, setHoveredDrone] = useState(null);
-  const [fleet] = useState(INITIAL_FLEET);
+  const [fleet, setFleet] = useState(INITIAL_FLEET);
+  const [wsConnected, setWsConnected] = useState(false);
   const [positions, setPositions] = useState(() => {
     const posMap = {};
     INITIAL_FLEET.forEach((d) => {
@@ -41,6 +42,66 @@ export default function FleetCommand({ onSelectDrone }) {
     });
     return posMap;
   });
+
+  // Live WebSocket Link to Python AI Telemetry Backend
+  useEffect(() => {
+    let ws = null;
+    let reconnectTimer = null;
+
+    const connectWS = () => {
+      try {
+        ws = new WebSocket('ws://localhost:8000');
+        ws.onopen = () => {
+          setWsConnected(true);
+          ws.send(JSON.stringify({ type: 'SELECT_DRONE', drone_id: 'FLEET_RADAR' }));
+        };
+        ws.onmessage = (evt) => {
+          try {
+            const data = JSON.parse(evt.data);
+            if (data.fleet_status && Array.isArray(data.fleet_status)) {
+              const statusMap = {};
+              data.fleet_status.forEach((item) => {
+                statusMap[item.id] = item;
+              });
+              setFleet((prev) =>
+                prev.map((drone) => {
+                  const update = statusMap[drone.id];
+                  if (update) {
+                    return {
+                      ...drone,
+                      alt: update.alt || drone.alt,
+                      health: update.health || drone.health,
+                      rul: update.rul !== undefined ? update.rul : drone.rul,
+                    };
+                  }
+                  return drone;
+                })
+              );
+            }
+          } catch (e) {
+            // fallback
+          }
+        };
+        ws.onclose = () => {
+          setWsConnected(false);
+          reconnectTimer = setTimeout(connectWS, 2500);
+        };
+        ws.onerror = () => {
+          setWsConnected(false);
+        };
+      } catch (err) {
+        setWsConnected(false);
+        reconnectTimer = setTimeout(connectWS, 2500);
+      }
+    };
+
+    connectWS();
+
+    return () => {
+      if (ws) ws.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+    };
+  }, []);
 
   // Subtle, smooth tactical patrol drift animation
   useEffect(() => {
@@ -100,7 +161,34 @@ export default function FleetCommand({ onSelectDrone }) {
           </div>
         </div>
         
-        <div style={{ display: 'flex', gap: '24px', fontFamily: '"JetBrains Mono", monospace' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', fontFamily: '"JetBrains Mono", monospace' }}>
+          {/* Live AI Link Status */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: wsConnected ? '#F0FDF4' : '#F8FAFC',
+            border: `1px solid ${wsConnected ? '#BBF7D0' : '#E2E8F0'}`,
+            padding: '6px 12px',
+            borderRadius: '6px',
+          }}>
+            <span style={{
+              display: 'inline-block',
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: wsConnected ? '#15803D' : '#94A3B8',
+              boxShadow: wsConnected ? '0 0 8px #15803D' : 'none',
+              animation: wsConnected ? 'pulse-green 2s infinite' : 'none'
+            }}></span>
+            <div>
+              <div style={{ fontSize: '0.62rem', color: '#64748B', lineHeight: 1 }}>AI DATA LINK</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: wsConnected ? '#15803D' : '#64748B' }}>
+                {wsConnected ? '10 Hz ACTIVE' : 'SIMULATION'}
+              </div>
+            </div>
+          </div>
+
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '0.68rem', color: '#64748B' }}>TOTAL ASSETS</div>
             <div style={{ fontSize: '1.4rem', color: '#0F172A', fontWeight: 700 }}>{fleet.length}</div>
