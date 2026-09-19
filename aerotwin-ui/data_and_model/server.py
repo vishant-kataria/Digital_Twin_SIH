@@ -3,6 +3,13 @@ import websockets
 import json
 import time
 import os
+import sys
+
+# Force unbuffered real-time stdout flushing for Render cloud logs
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except Exception:
+    pass
 
 # Enable ANSI terminal colors on Windows console
 os.system('')
@@ -120,6 +127,7 @@ def print_aerospace_dashboard(tick_count, drones_data, connected_clients):
     print(f"  * {BOLD}TAPAS-03 Subsystems Health{RESET}         : Combustion: {scores.get('combustion', 65)}% | {RED}Cooling: {scores.get('cooling', 38)}% (OVERHEAT){RESET} | {RED}Lubrication: {scores.get('lubrication', 22)}% (CRITICAL DROP){RESET} | Electrical: {scores.get('electrical', 94)}%")
     print(f"  * {BOLD}Tactical Advisory Directive{RESET}        : {BG_RED} ACTION: {t3_ai.get('action_advisory', 'LAND IMMEDIATELY').upper()} {RESET}")
     print("=" * 132)
+    sys.stdout.flush()
 
 async def telemetry_handler(websocket, path=None):
     """
