@@ -50,7 +50,8 @@ export default function FleetCommand({ onSelectDrone }) {
 
     const connectWS = () => {
       try {
-        ws = new WebSocket('ws://localhost:8000');
+        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
+        ws = new WebSocket(wsUrl);
         ws.onopen = () => {
           setWsConnected(true);
           ws.send(JSON.stringify({ type: 'SELECT_DRONE', drone_id: 'FLEET_RADAR' }));

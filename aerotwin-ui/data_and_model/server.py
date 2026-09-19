@@ -215,11 +215,13 @@ async def broadcast_telemetry():
         await asyncio.sleep(0.1) # 10 Hz rate
 
 async def main():
+    port = int(os.environ.get('PORT', 8000))
+    host = "0.0.0.0"
     print(f"{BOLD}{CYAN}================================================================================{RESET}")
     print(f"{BOLD}{GREEN}✓ AeroTwin Multi-Drone Digital Twin Server Initialized{RESET}")
-    print(f"{BOLD}Listening for React Dashboards on ws://localhost:8000 ...{RESET}")
+    print(f"{BOLD}Listening for React Dashboards on ws://{host}:{port} ...{RESET}")
     print(f"{BOLD}{CYAN}================================================================================{RESET}")
-    server = await websockets.serve(telemetry_handler, "localhost", 8000)
+    server = await websockets.serve(telemetry_handler, host, port)
     broadcast_task = asyncio.create_task(broadcast_telemetry())
     await asyncio.gather(server.wait_closed(), broadcast_task)
 
