@@ -42,14 +42,168 @@ import CircularGauge from '../components/ui/CircularGauge';
 import Engine3DView from '../Engine3DView';
 
 const FLEET_LIST = [
-  { id: 'TAPAS-01', model: 'Rotax 914 Turbo', mission: 'ISR Patrol', initialHealth: 'nominal', alt: '18,500 ft' },
-  { id: 'TAPAS-02', model: 'AE-3007 Piston', mission: 'Border Recon', initialHealth: 'warning', alt: '22,100 ft' },
-  { id: 'TAPAS-03', model: 'Rotax 914 Turbo', mission: 'High Altitude Test', initialHealth: 'critical', alt: '12,000 ft' },
-  { id: 'TAPAS-04', model: 'AE-3007 Piston', mission: 'Standby - Base', initialHealth: 'nominal', alt: '0 ft' },
+  { id: 'TAPAS-01', model: 'Rotax 914 Turbo', mission: 'ISR Patrol Bravo', initialHealth: 'nominal', alt: '18,500 ft' },
+  { id: 'TAPAS-04', model: 'Rotax 914 Turbo', mission: 'Tactical Recon', initialHealth: 'nominal', alt: '19,200 ft' },
+  { id: 'TAPAS-05', model: 'AE-3007 Piston', mission: 'Western Sector', initialHealth: 'nominal', alt: '17,800 ft' },
+  { id: 'TAPAS-06', model: 'Rotax 914 Turbo', mission: 'Coastal Watch', initialHealth: 'nominal', alt: '16,500 ft' },
+  { id: 'TAPAS-02', model: 'Rotax 914 Turbo', mission: 'Border Recon', initialHealth: 'warning', alt: '22,100 ft' },
+  { id: 'TAPAS-07', model: 'AE-3007 Piston', mission: 'Northern Ridge', initialHealth: 'warning', alt: '21,500 ft' },
+  { id: 'TAPAS-03', model: 'Rotax 914 Turbo', mission: 'Emergency Recovery Vector', initialHealth: 'critical', alt: '12,000 ft' },
+  { id: 'TAPAS-08', model: 'Rotax 914 Turbo', mission: 'Tarmac Standby Alpha', initialHealth: 'nominal', alt: '0 ft' },
+  { id: 'TAPAS-09', model: 'Rotax 914 Turbo', mission: 'Tarmac Standby Bravo', initialHealth: 'nominal', alt: '0 ft' },
+  { id: 'TAPAS-10', model: 'AE-3007 Piston', mission: 'Tarmac Standby Charlie', initialHealth: 'nominal', alt: '0 ft' },
+  { id: 'TAPAS-11', model: 'Rotax 914 Turbo', mission: 'Tarmac Standby Delta', initialHealth: 'nominal', alt: '0 ft' },
 ];
+
+export const getDroneProfile = (droneId) => {
+  const id = (droneId || '').toUpperCase().trim();
+  if (id.includes('03')) {
+    // 1 RED DRONE - VERY UNSTABLE / CRITICAL ENGINE DEGRADATION
+    return {
+      category: 'red',
+      severity: 'critical',
+      statusLabel: 'CRITICAL',
+      mission: 'Emergency Recovery Vector',
+      model: 'Rotax 914 Turbo',
+      naturalFaultCode: 4, // Lubrication & Thermal Runaway
+      altitude: 12000,
+      airspeed: 185,
+      fuelRemaining: '24%',
+      coordinates: '23.41°N, 72.56°E',
+      base: {
+        rpm: 2420,
+        rpmJitter: 120, // Erratic hunting / surging
+        cht: 218.4,    // Overheating (> 190°C critical limit)
+        chtJitter: 4.5,
+        egt: 842.0,    // Critical hot (> 820°C)
+        egtJitter: 12.0,
+        oilPress: 2.15,// Critical low (< 2.5 bar, nominal 3.5 - 5.0)
+        oilPressJitter: 0.12,
+        oilTemp: 116.5,// Boiling oil (> 105°C critical)
+        oilTempJitter: 2.0,
+        fuelFlow: 26.8,// High flow
+        fuelFlowJitter: 0.8,
+        vibration: 3.85,// Critical mechanical knock (> 3.4 mm/s)
+        vibrationJitter: 0.35,
+        batteryVoltage: 25.4,
+        batteryJitter: 0.15,
+        injectionTiming: 14.6,
+        timingJitter: 0.3,
+      },
+      ai: {
+        rulHours: 22.4, // Rapid countdown under 30h
+        confidence: 93.8,
+        healthOverall: 38,
+        combustionStability: 58,
+        lubricationScore: 24,
+        coolingScore: 36,
+        electricalScore: 84,
+        anomalyMessage: 'CRITICAL ALERT: SEVERE LUBRICATION FAILURE & RUNAWAY CHT. Oil pressure (2.15 bar) below emergency threshold. Bearing knock detected. ADVISORY: LAND IMMEDIATELY.',
+      }
+    };
+  } else if (id.includes('02') || id.includes('07')) {
+    // 2 YELLOW DRONES - NORMAL UNSTABLE / WARNING DEGRADATION
+    const is07 = id.includes('07');
+    return {
+      category: 'yellow',
+      severity: 'warning',
+      statusLabel: 'WARNING',
+      mission: is07 ? 'Northern Ridge Surveillance' : 'High Altitude Boundary Test',
+      model: is07 ? 'AE-3007 Piston' : 'Rotax 914 Turbo',
+      naturalFaultCode: 3, // Cooling / Atmospheric Strain
+      altitude: is07 ? 21500 : 22100,
+      airspeed: 138,
+      fuelRemaining: '62%',
+      coordinates: is07 ? '24.12°N, 71.85°E' : '23.95°N, 71.72°E',
+      base: {
+        rpm: 3040,
+        rpmJitter: 45, // Atmospheric draft jitter
+        cht: 187.5,    // Elevated (> 180°C limit, warning)
+        chtJitter: 2.5,
+        egt: 778.0,    // Elevated (760 - 800°C)
+        egtJitter: 8.0,
+        oilPress: 3.42,// Slightly low / caution
+        oilPressJitter: 0.08,
+        oilTemp: 96.5, // Warm (95 - 100°C)
+        oilTempJitter: 1.2,
+        fuelFlow: 21.8,
+        fuelFlowJitter: 0.5,
+        vibration: 2.85,// Elevated vibration (> 2.7 mm/s)
+        vibrationJitter: 0.15,
+        batteryVoltage: 27.1,
+        batteryJitter: 0.08,
+        injectionTiming: 13.2,
+        timingJitter: 0.15,
+      },
+      ai: {
+        rulHours: 124.5,
+        confidence: 87.4,
+        healthOverall: 72,
+        combustionStability: 86,
+        lubricationScore: 80,
+        coolingScore: 65,
+        electricalScore: 94,
+        anomalyMessage: 'WARNING: Elevated thermal stress at high altitude. Cyl 4 Temp Delta exceeds baseline (+28°C). Partial coolant restriction suspected. Maintain surveillance.',
+      }
+    };
+  } else {
+    // GREEN DRONES - STABLE / NOMINAL CRUISE (01, 04, 05, 06, 08, 09, 10, 11)
+    const is04 = id.includes('04');
+    const is05 = id.includes('05');
+    const is06 = id.includes('06');
+    const isTarmac = id.includes('08') || id.includes('09') || id.includes('10') || id.includes('11');
+    const alt = is04 ? 19200 : is05 ? 17800 : is06 ? 16500 : isTarmac ? 0 : 18500;
+    return {
+      category: 'green',
+      severity: 'nominal',
+      statusLabel: 'OPERATIONAL',
+      mission: is04 ? 'Tactical Recon' : is05 ? 'Western Sector' : is06 ? 'Coastal Watch' : isTarmac ? 'Airbase Alpha Standby' : 'ISR Patrol Bravo',
+      model: is05 || id.includes('10') ? 'AE-3007 Piston' : 'Rotax 914 Turbo',
+      naturalFaultCode: 0,
+      altitude: alt,
+      airspeed: isTarmac ? 0 : 142,
+      fuelRemaining: isTarmac ? '100%' : '78%',
+      coordinates: '23.85°N, 72.10°E',
+      base: {
+        rpm: isTarmac ? 0 : 2820,
+        rpmJitter: isTarmac ? 0 : 12, // Smooth, stable
+        cht: isTarmac ? 36.0 : 156.4, // Nominal cool (< 165°C)
+        chtJitter: 0.5,
+        egt: isTarmac ? 35.0 : 718.0, // Nominal (650 - 730°C)
+        egtJitter: 2.0,
+        oilPress: isTarmac ? 0.0 : 4.15, // Nominal (3.5 - 5.0 bar)
+        oilPressJitter: 0.05,
+        oilTemp: isTarmac ? 32.0 : 78.5, // Nominal (70 - 85°C)
+        oilTempJitter: 0.4,
+        fuelFlow: isTarmac ? 0.0 : 18.2, // Nominal (14 - 24 L/h)
+        fuelFlowJitter: 0.2,
+        vibration: isTarmac ? 0.05 : 1.95, // Nominal (< 3.0 mm/s)
+        vibrationJitter: 0.08,
+        batteryVoltage: 27.8,
+        batteryJitter: 0.05,
+        injectionTiming: isTarmac ? 0.0 : 12.4, // Nominal 12.0° BTDC
+        timingJitter: 0.1,
+      },
+      ai: {
+        rulHours: isTarmac ? 800.0 : 442.0,
+        confidence: 91.2,
+        healthOverall: 96,
+        combustionStability: 98,
+        lubricationScore: 97,
+        coolingScore: 95,
+        electricalScore: 98,
+        anomalyMessage: isTarmac ? 'Asset in Ground Standby at Airbase Alpha. Systems verified and ready for scramble.' : 'All systems nominal. Digital twin baseline verified within 0.02% variance. Optimal cruise performance.',
+      }
+    };
+  }
+};
+
 export default function DroneConfigurationView({ drone, onBack }) {
   const tabParam = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('tab') : null;
-  const [selectedDroneId, setSelectedDroneId] = useState(drone?.id || 'TAPAS-01');
+  const initialDroneId = drone?.id || 'TAPAS-01';
+  const [selectedDroneId, setSelectedDroneId] = useState(initialDroneId);
+  const initialProfile = getDroneProfile(initialDroneId);
+
   const [activeTab, setActiveTab] = useState(tabParam || '3d'); // '3d', 'trends', 'params', 'config'
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('en-GB', { hour12: false }));
   const [selectedTrendMetric, setSelectedTrendMetric] = useState('rpm');
@@ -58,61 +212,61 @@ export default function DroneConfigurationView({ drone, onBack }) {
 
   // Configuration controls state
   const [throttle, setThrottle] = useState(78);
-  const [cruiseAltitude, setCruiseAltitude] = useState(18500);
-  const [activeFault, setActiveFault] = useState(0); // 0=None, 1=Misfire, 2=Injector, 3=Cooling, 4=Lubrication, 5=Sensor Drift, 6=Instability
+  const [cruiseAltitude, setCruiseAltitude] = useState(initialProfile.altitude);
+  const [activeFault, setActiveFault] = useState(initialProfile.naturalFaultCode); // Tracks active fault code
 
-  // Real-time telemetry state
+  // Real-time telemetry state initialized directly from drone profile
   const [telemetry, setTelemetry] = useState({
-    rpm: 2840,
-    cht: 162.0,
-    egt: 718.0,
-    oilPress: 3.8,
-    oilTemp: 78.0,
-    fuelFlow: 18.4,
-    vibration: 2.1,
-    batteryVoltage: 27.6,
-    injectionTiming: 12.4,
-    altitude: 18500,
-    fault_label: 0,
+    rpm: initialProfile.base.rpm,
+    cht: initialProfile.base.cht,
+    egt: initialProfile.base.egt,
+    oilPress: initialProfile.base.oilPress,
+    oilTemp: initialProfile.base.oilTemp,
+    fuelFlow: initialProfile.base.fuelFlow,
+    vibration: initialProfile.base.vibration,
+    batteryVoltage: initialProfile.base.batteryVoltage,
+    injectionTiming: initialProfile.base.injectionTiming,
+    altitude: initialProfile.altitude,
+    fault_label: initialProfile.naturalFaultCode,
   });
 
   const [aiAnalytics, setAiAnalytics] = useState({
-    rulHours: 125.5,
-    confidence: 87.4,
-    healthOverall: 92,
-    combustionStability: 96,
-    lubricationScore: 94,
-    coolingScore: 91,
-    electricalScore: 97,
-    anomalyMessage: 'Cyl 4 Temp Delta exceeds baseline. Probable partial coolant blockage.',
-    severity: 'warning',
+    rulHours: initialProfile.ai.rulHours,
+    confidence: initialProfile.ai.confidence,
+    healthOverall: initialProfile.ai.healthOverall,
+    combustionStability: initialProfile.ai.combustionStability,
+    lubricationScore: initialProfile.ai.lubricationScore,
+    coolingScore: initialProfile.ai.coolingScore,
+    electricalScore: initialProfile.ai.electricalScore,
+    anomalyMessage: initialProfile.ai.anomalyMessage,
+    severity: initialProfile.severity,
   });
 
   const [telemetryHistory, setTelemetryHistory] = useState(() => {
-    // Pre-populate with realistic initial history
+    // Pre-populate with realistic initial history matching drone profile
     const initial = [];
     const baseTime = Date.now() - 30 * 1000;
     for (let i = 0; i < 30; i++) {
       const t = new Date(baseTime + i * 1000).toLocaleTimeString('en-GB', { hour12: false });
+      const jitter = (Math.random() - 0.5);
       initial.push({
         time: t,
-        rpm: 2820 + Math.sin(i * 0.3) * 40,
-        cht: 160 + Math.sin(i * 0.2) * 4,
-        egt: 715 + Math.cos(i * 0.25) * 8,
-        oilPress: 3.8 + (Math.random() - 0.5) * 0.1,
-        oilTemp: 78 + Math.sin(i * 0.1) * 1.5,
-        fuelFlow: 18.4 + (Math.random() - 0.5) * 0.4,
-        vibration: 2.1 + (Math.random() - 0.5) * 0.1,
+        rpm: Math.round(initialProfile.base.rpm + jitter * initialProfile.base.rpmJitter),
+        cht: Math.round((initialProfile.base.cht + jitter * initialProfile.base.chtJitter) * 10) / 10,
+        egt: Math.round(initialProfile.base.egt + jitter * initialProfile.base.egtJitter),
+        oilPress: Math.max(1.5, Math.round((initialProfile.base.oilPress + jitter * initialProfile.base.oilPressJitter) * 100) / 100),
+        oilTemp: Math.round((initialProfile.base.oilTemp + jitter * initialProfile.base.oilTempJitter) * 10) / 10,
+        fuelFlow: Math.max(0, Math.round((initialProfile.base.fuelFlow + jitter * initialProfile.base.fuelFlowJitter) * 10) / 10),
+        vibration: Math.round((initialProfile.base.vibration + Math.abs(jitter) * initialProfile.base.vibrationJitter) * 10) / 10,
       });
     }
     return initial;
   });
 
   const [eventLogs, setEventLogs] = useState([
-    { id: 1, time: '15:16:20', text: 'SYS: Ground Control link established with TAPAS-01', type: 'info' },
-    { id: 2, time: '15:16:23', text: 'SEC: End-to-end AES-256 telemetry encryption verified', type: 'info' },
-    { id: 3, time: '15:16:25', text: 'DT: Digital twin synchronization baseline nominal', type: 'success' },
-    { id: 4, time: '15:16:27', text: 'AI: Degradation trend registered on Cyl 4 CHT sensor', type: 'warning' },
+    { id: 1, time: new Date().toLocaleTimeString('en-GB', { hour12: false }), text: `SYS: Digital Twin initialized for ${initialDroneId} [${initialProfile.statusLabel}]`, type: initialProfile.severity === 'critical' ? 'critical' : initialProfile.severity === 'warning' ? 'warning' : 'info' },
+    { id: 2, time: new Date().toLocaleTimeString('en-GB', { hour12: false }), text: 'SEC: End-to-end AES-256 telemetry encryption verified', type: 'info' },
+    { id: 3, time: new Date().toLocaleTimeString('en-GB', { hour12: false }), text: initialProfile.severity === 'critical' ? 'ALERT: Critical telemetry degradation received from asset' : 'DT: Digital twin synchronization baseline nominal', type: initialProfile.severity === 'critical' ? 'critical' : 'success' },
   ]);
 
   const wsRef = useRef(null);
@@ -125,7 +279,81 @@ export default function DroneConfigurationView({ drone, onBack }) {
     return () => clearInterval(timer);
   }, []);
 
-  // 2. WebSocket & Client Simulation fallback
+  // 2. Synchronize selectedDroneId when parent drone prop changes
+  useEffect(() => {
+    if (drone?.id && drone.id !== selectedDroneId) {
+      setSelectedDroneId(drone.id);
+    }
+  }, [drone?.id]);
+
+  // 3. When selectedDroneId changes, immediately switch telemetry and AI state to its profile
+  useEffect(() => {
+    const prof = getDroneProfile(selectedDroneId);
+    setActiveFault(prof.naturalFaultCode);
+    setCruiseAltitude(prof.altitude);
+
+    setTelemetry({
+      rpm: prof.base.rpm,
+      cht: prof.base.cht,
+      egt: prof.base.egt,
+      oilPress: prof.base.oilPress,
+      oilTemp: prof.base.oilTemp,
+      fuelFlow: prof.base.fuelFlow,
+      vibration: prof.base.vibration,
+      batteryVoltage: prof.base.batteryVoltage,
+      injectionTiming: prof.base.injectionTiming,
+      altitude: prof.altitude,
+      fault_label: prof.naturalFaultCode,
+    });
+
+    setAiAnalytics({
+      rulHours: prof.ai.rulHours,
+      confidence: prof.ai.confidence,
+      healthOverall: prof.ai.healthOverall,
+      combustionStability: prof.ai.combustionStability,
+      lubricationScore: prof.ai.lubricationScore,
+      coolingScore: prof.ai.coolingScore,
+      electricalScore: prof.ai.electricalScore,
+      anomalyMessage: prof.ai.anomalyMessage,
+      severity: prof.severity,
+    });
+
+    // Rebuild initial history with realistic baseline for this drone
+    const initial = [];
+    const baseTime = Date.now() - 30 * 1000;
+    for (let i = 0; i < 30; i++) {
+      const t = new Date(baseTime + i * 1000).toLocaleTimeString('en-GB', { hour12: false });
+      const jitter = (Math.random() - 0.5);
+      initial.push({
+        time: t,
+        rpm: Math.round(prof.base.rpm + jitter * prof.base.rpmJitter),
+        cht: Math.round((prof.base.cht + jitter * prof.base.chtJitter) * 10) / 10,
+        egt: Math.round(prof.base.egt + jitter * prof.base.egtJitter),
+        oilPress: Math.max(1.5, Math.round((prof.base.oilPress + jitter * prof.base.oilPressJitter) * 100) / 100),
+        oilTemp: Math.round((prof.base.oilTemp + jitter * prof.base.oilTempJitter) * 10) / 10,
+        fuelFlow: Math.max(0, Math.round((prof.base.fuelFlow + jitter * prof.base.fuelFlowJitter) * 10) / 10),
+        vibration: Math.round((prof.base.vibration + Math.abs(jitter) * prof.base.vibrationJitter) * 10) / 10,
+      });
+    }
+    setTelemetryHistory(initial);
+
+    setEventLogs((prev) => [
+      {
+        id: Date.now(),
+        time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
+        text: `SYS: Telemetry & AI stream switched to ${selectedDroneId} [${prof.statusLabel}]`,
+        type: prof.severity === 'critical' ? 'critical' : prof.severity === 'warning' ? 'warning' : 'info',
+      },
+      ...prev.slice(0, 8),
+    ]);
+
+    // Send selection to backend if connected
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: 'SELECT_DRONE', drone_id: selectedDroneId }));
+    }
+  }, [selectedDroneId]);
+
+  // 4. WebSocket & Client Simulation fallback
   useEffect(() => {
     let fallbackInterval = null;
 
@@ -136,8 +364,10 @@ export default function DroneConfigurationView({ drone, onBack }) {
 
       ws.onopen = () => {
         setWsConnected(true);
+        // Inform backend which drone stream is requested
+        ws.send(JSON.stringify({ type: 'SELECT_DRONE', drone_id: selectedDroneId }));
         setEventLogs((prev) => [
-          { id: Date.now(), time: new Date().toLocaleTimeString('en-GB', { hour12: false }), text: 'NET: Connected to Python AI Digital Twin server (ws://localhost:8000)', type: 'success' },
+          { id: Date.now(), time: new Date().toLocaleTimeString('en-GB', { hour12: false }), text: `NET: Connected to Python AI Digital Twin server (Streaming ${selectedDroneId})`, type: 'success' },
           ...prev.slice(0, 8),
         ]);
       };
@@ -145,6 +375,10 @@ export default function DroneConfigurationView({ drone, onBack }) {
       ws.onmessage = (event) => {
         try {
           const payload = JSON.parse(event.data);
+          // If message is for a different drone, ignore until stream switches
+          if (payload.drone_id && payload.drone_id !== selectedDroneId) {
+            return;
+          }
           const timeStr = new Date().toLocaleTimeString('en-GB', { hour12: false });
           if (payload.telemetry) {
             setTelemetry((prev) => ({
@@ -153,7 +387,11 @@ export default function DroneConfigurationView({ drone, onBack }) {
               cht: payload.telemetry.cht ?? prev.cht,
               egt: payload.telemetry.egt ?? prev.egt,
               oilPress: payload.telemetry.oilPress ?? prev.oilPress,
+              oilTemp: payload.telemetry.oilTemp ?? prev.oilTemp,
               fuelFlow: payload.telemetry.fuelFlow ?? prev.fuelFlow,
+              vibration: payload.telemetry.vibration ?? prev.vibration,
+              batteryVoltage: payload.telemetry.batteryVoltage ?? prev.batteryVoltage,
+              injectionTiming: payload.telemetry.injectionTiming ?? prev.injectionTiming,
               altitude: payload.telemetry.altitude ?? prev.altitude,
               fault_label: payload.ai_analytics?.fault_label ?? prev.fault_label,
             }));
@@ -168,7 +406,14 @@ export default function DroneConfigurationView({ drone, onBack }) {
             setAiAnalytics((prev) => ({
               ...prev,
               rulHours: payload.ai_analytics.rul_hours ?? prev.rulHours,
-              severity: (payload.ai_analytics.rul_hours < 30 || payload.ai_analytics.fault_label > 0) ? 'critical' : 'warning',
+              confidence: payload.ai_analytics.confidence_pct ?? payload.ai_analytics.confidence ?? prev.confidence,
+              healthOverall: payload.ai_analytics.health_scores?.overall ?? prev.healthOverall,
+              combustionStability: payload.ai_analytics.health_scores?.combustion ?? prev.combustionStability,
+              lubricationScore: payload.ai_analytics.health_scores?.lubrication ?? prev.lubricationScore,
+              coolingScore: payload.ai_analytics.health_scores?.cooling ?? prev.coolingScore,
+              electricalScore: payload.ai_analytics.health_scores?.electrical ?? prev.electricalScore,
+              anomalyMessage: payload.ai_analytics.diagnosis ?? prev.anomalyMessage,
+              severity: payload.ai_analytics.severity || ((payload.ai_analytics.rul_hours < 30 || payload.ai_analytics.fault_label > 0) ? 'critical' : 'nominal'),
             }));
           }
         } catch (err) {
@@ -190,65 +435,64 @@ export default function DroneConfigurationView({ drone, onBack }) {
     // High-fidelity fallback client simulation when Python server is not streaming
     fallbackInterval = setInterval(() => {
       const nowTime = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      const prof = getDroneProfile(selectedDroneId);
 
       setTelemetry((prev) => {
-        // Apply degradation physics according to active fault
-        let noiseRpm = (Math.random() - 0.5) * 15;
-        let noiseCht = (Math.random() - 0.5) * 0.8;
-        let noiseEgt = (Math.random() - 0.5) * 3;
-        let noiseOilP = (Math.random() - 0.5) * 0.05;
-        let noiseOilT = (Math.random() - 0.5) * 0.3;
-        let noiseFuel = (Math.random() - 0.5) * 0.15;
-        let noiseVib = (Math.random() - 0.5) * 0.05;
+        let baseRpm = prof.base.rpm;
+        let baseCht = prof.base.cht;
+        let baseEgt = prof.base.egt;
+        let baseOilP = prof.base.oilPress;
+        let baseOilT = prof.base.oilTemp;
+        let baseFuel = prof.base.fuelFlow;
+        let baseVib = prof.base.vibration;
+        let baseBattery = prof.base.batteryVoltage;
+        let baseInj = prof.base.injectionTiming;
 
-        let baseRpm = throttle * 36;
-        let baseCht = 130 + throttle * 0.45;
-        let baseEgt = 650 + throttle * 0.9;
-        let baseOilP = 3.2 + (throttle / 100) * 0.8;
-        let baseOilT = 72 + throttle * 0.12;
-        let baseFuel = throttle * 0.24;
-        let baseVib = 1.8 + throttle * 0.005;
+        // Apply organic jitter specific to drone profile
+        let noiseRpm = (Math.random() - 0.5) * prof.base.rpmJitter;
+        let noiseCht = (Math.random() - 0.5) * prof.base.chtJitter;
+        let noiseEgt = (Math.random() - 0.5) * prof.base.egtJitter;
+        let noiseOilP = (Math.random() - 0.5) * prof.base.oilPressJitter;
+        let noiseOilT = (Math.random() - 0.5) * prof.base.oilTempJitter;
+        let noiseFuel = (Math.random() - 0.5) * prof.base.fuelFlowJitter;
+        let noiseVib = (Math.random() - 0.5) * prof.base.vibrationJitter;
 
-        // Fault injections
-        if (activeFault === 1) {
-          // Misfire
+        // If user manually injected a fault or drone has a natural fault
+        const effFault = activeFault !== undefined ? activeFault : prof.naturalFaultCode;
+
+        if (effFault === 1) {
           baseRpm -= 250;
           baseVib += 1.6;
           baseEgt -= 45;
-        } else if (activeFault === 2) {
-          // Injector
+        } else if (effFault === 2) {
           baseFuel += 3.2;
           baseEgt += 35;
-        } else if (activeFault === 3) {
-          // Cooling degradation / Overheating
+        } else if (effFault === 3 && prof.category !== 'yellow') {
           baseCht += 48;
           baseOilT += 18;
-        } else if (activeFault === 4) {
-          // Lubrication issue
+        } else if (effFault === 4 && prof.category !== 'red') {
           baseOilP = Math.max(1.2, baseOilP - 1.8);
           baseOilT += 22;
           baseVib += 1.4;
-        } else if (activeFault === 5) {
-          // Sensor drift
+        } else if (effFault === 5) {
           baseCht += 35;
-        } else if (activeFault === 6) {
-          // Combustion instability
+        } else if (effFault === 6) {
           noiseRpm += (Math.random() > 0.5 ? 120 : -120);
           noiseEgt += (Math.random() > 0.5 ? 35 : -35);
         }
 
         const newPoint = {
-          rpm: Math.max(1500, Math.min(5200, Math.round(baseRpm + noiseRpm))),
+          rpm: Math.max(0, Math.min(5500, Math.round(baseRpm + noiseRpm))),
           cht: Math.round((baseCht + noiseCht) * 10) / 10,
           egt: Math.round(baseEgt + noiseEgt),
-          oilPress: Math.round((baseOilP + noiseOilP) * 100) / 100,
+          oilPress: Math.max(0, Math.round((baseOilP + noiseOilP) * 100) / 100),
           oilTemp: Math.round((baseOilT + noiseOilT) * 10) / 10,
-          fuelFlow: Math.round((baseFuel + noiseFuel) * 10) / 10,
+          fuelFlow: Math.max(0, Math.round((baseFuel + noiseFuel) * 10) / 10),
           vibration: Math.round((baseVib + noiseVib) * 10) / 10,
-          batteryVoltage: 27.6 + (Math.random() - 0.5) * 0.1,
-          injectionTiming: 12.4 + (Math.random() - 0.5) * 0.2,
-          altitude: cruiseAltitude,
-          fault_label: activeFault,
+          batteryVoltage: Math.round((baseBattery + (Math.random() - 0.5) * 0.1) * 10) / 10,
+          injectionTiming: Math.round((baseInj + (Math.random() - 0.5) * 0.2) * 10) / 10,
+          altitude: prof.altitude,
+          fault_label: effFault,
         };
 
         setTelemetryHistory((hist) => {
@@ -259,43 +503,47 @@ export default function DroneConfigurationView({ drone, onBack }) {
         return newPoint;
       });
 
-      // Update AI analytics dynamically based on fault state
+      // Update AI analytics dynamically based on drone profile and fault
       setAiAnalytics((prev) => {
-        if (activeFault === 0) {
+        const effFault = activeFault !== undefined ? activeFault : prof.naturalFaultCode;
+
+        if (prof.category === 'red') {
+          // Rapid countdown for red drone
+          const nextRul = Math.max(4.5, Math.round((prev.rulHours - 0.05) * 10) / 10);
           return {
-            rulHours: 412.0,
-            confidence: 91.2,
-            healthOverall: 94,
-            combustionStability: 98,
-            lubricationScore: 96,
-            coolingScore: 95,
-            electricalScore: 97,
-            anomalyMessage: 'All systems nominal. Digital twin baseline verified within 0.02% variance.',
-            severity: 'nominal',
+            rulHours: nextRul,
+            confidence: 93.8,
+            healthOverall: 38,
+            combustionStability: 58,
+            lubricationScore: 24,
+            coolingScore: 36,
+            electricalScore: 84,
+            anomalyMessage: 'CRITICAL ALERT: SEVERE LUBRICATION FAILURE & RUNAWAY CHT. Oil pressure (2.15 bar) below emergency threshold. Bearing knock detected. ADVISORY: LAND IMMEDIATELY.',
+            severity: 'critical',
           };
-        } else if (activeFault === 3) {
+        } else if (prof.category === 'yellow' || effFault === 3) {
           return {
-            rulHours: 125.5,
+            rulHours: 124.5,
             confidence: 87.4,
             healthOverall: 72,
-            combustionStability: 96,
-            lubricationScore: 94,
-            coolingScore: 68,
-            electricalScore: 97,
-            anomalyMessage: 'WARNING: DEGRADATION DETECTED - Cyl 4 Temp Delta exceeds baseline. Probable partial coolant blockage.',
+            combustionStability: 86,
+            lubricationScore: 80,
+            coolingScore: 65,
+            electricalScore: 94,
+            anomalyMessage: 'WARNING: Elevated thermal stress at high altitude. Cyl 4 Temp Delta exceeds baseline (+28°C). Partial coolant restriction suspected. Maintain surveillance.',
             severity: 'warning',
           };
-        } else if (activeFault === 4) {
+        } else if (effFault === 0) {
           return {
-            rulHours: 28.4,
-            confidence: 93.8,
-            healthOverall: 48,
-            combustionStability: 90,
-            lubricationScore: 42,
-            coolingScore: 74,
-            electricalScore: 95,
-            anomalyMessage: 'CRITICAL: RAPID LUBRICATION DEGRADATION. Oil pressure below minimum flight threshold. Land immediately.',
-            severity: 'critical',
+            rulHours: prof.altitude === 0 ? 800.0 : 442.0,
+            confidence: 91.2,
+            healthOverall: 96,
+            combustionStability: 98,
+            lubricationScore: 97,
+            coolingScore: 95,
+            electricalScore: 98,
+            anomalyMessage: prof.altitude === 0 ? 'Asset in Ground Standby at Airbase Alpha. Systems verified and ready for scramble.' : 'All systems nominal. Digital twin baseline verified within 0.02% variance. Optimal cruise performance.',
+            severity: 'nominal',
           };
         } else {
           return {
@@ -306,7 +554,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
             lubricationScore: 88,
             coolingScore: 84,
             electricalScore: 92,
-            anomalyMessage: `AI ALERT: Sensor anomaly detected (Fault Type #${activeFault}). Predictive LSTM model evaluating degradation trend.`,
+            anomalyMessage: `AI ALERT: Sensor anomaly detected (Fault Type #${effFault}). Predictive LSTM model evaluating degradation trend.`,
             severity: 'warning',
           };
         }
@@ -317,7 +565,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
       if (wsRef.current) wsRef.current.close();
       if (fallbackInterval) clearInterval(fallbackInterval);
     };
-  }, [throttle, cruiseAltitude, activeFault]);
+  }, [selectedDroneId, activeFault, throttle, cruiseAltitude]);
 
   // Handle manual fault injection test
   const triggerFaultInjection = (faultCode) => {
@@ -343,6 +591,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
   };
 
   const currentDroneObj = FLEET_LIST.find((d) => d.id === selectedDroneId) || FLEET_LIST[0];
+  const activeProfile = getDroneProfile(selectedDroneId);
 
   return (
     <div
@@ -568,10 +817,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                 <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>RPM</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.9rem', fontWeight: 700, color: '#0F172A' }}>
+                  <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.9rem', fontWeight: 700, color: telemetry.rpm > 5000 || telemetry.rpm < 2000 ? '#DC2626' : telemetry.rpm > 4500 ? '#D97706' : '#0F172A' }}>
                     {telemetry.rpm}
                   </span>
-                  <StatusBadge status={telemetry.rpm > 4500 ? 'warning' : 'nominal'} label={telemetry.rpm > 4500 ? 'High' : 'Normal'} />
+                  <StatusBadge
+                    status={telemetry.rpm > 5000 || telemetry.rpm < 2000 ? 'critical' : telemetry.rpm > 4500 ? 'warning' : 'nominal'}
+                    label={telemetry.rpm > 5000 ? 'SURGE' : telemetry.rpm < 2000 ? 'LOW' : telemetry.rpm > 4500 ? 'HIGH' : 'NORMAL'}
+                  />
                 </div>
               </div>
               <LinearProgressBar value={telemetry.rpm} max={5500} showLabel={false} showValue={false} height={5} />
@@ -584,10 +836,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 3.5 - 5.0 bar</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.oilPress < 2.5 ? '#DC2626' : telemetry.oilPress < 3.0 ? '#D97706' : '#0F172A' }}>
                   {telemetry.oilPress.toFixed(2)} bar
                 </span>
-                <StatusBadge status={telemetry.oilPress < 2.5 ? 'critical' : 'nominal'} />
+                <StatusBadge
+                  status={telemetry.oilPress < 2.5 ? 'critical' : telemetry.oilPress < 3.0 ? 'warning' : 'nominal'}
+                  label={telemetry.oilPress < 2.5 ? 'CRITICAL' : telemetry.oilPress < 3.0 ? 'LOW' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -598,10 +853,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 70 - 95 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.oilTemp > 105 ? '#DC2626' : telemetry.oilTemp > 95 ? '#D97706' : '#0F172A' }}>
                   {telemetry.oilTemp.toFixed(1)} °C
                 </span>
-                <StatusBadge status={telemetry.oilTemp > 100 ? 'warning' : 'nominal'} />
+                <StatusBadge
+                  status={telemetry.oilTemp > 105 ? 'critical' : telemetry.oilTemp > 95 ? 'warning' : 'nominal'}
+                  label={telemetry.oilTemp > 105 ? 'OVERHEAT' : telemetry.oilTemp > 95 ? 'HIGH' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -612,10 +870,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Limit: &lt; 180 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.cht > 180 ? '#DC2626' : '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.cht > 195 ? '#DC2626' : telemetry.cht > 175 ? '#D97706' : '#0F172A' }}>
                   {telemetry.cht.toFixed(1)} °C
                 </span>
-                <StatusBadge status={telemetry.cht > 190 ? 'critical' : telemetry.cht > 170 ? 'warning' : 'nominal'} />
+                <StatusBadge
+                  status={telemetry.cht > 195 ? 'critical' : telemetry.cht > 175 ? 'warning' : 'nominal'}
+                  label={telemetry.cht > 195 ? 'CRITICAL' : telemetry.cht > 175 ? 'ELEVATED' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -626,10 +887,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 650 - 800 °C</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.egt > 820 ? '#DC2626' : telemetry.egt > 790 ? '#D97706' : '#0F172A' }}>
                   {telemetry.egt.toFixed(0)} °C
                 </span>
-                <StatusBadge status="nominal" />
+                <StatusBadge
+                  status={telemetry.egt > 820 ? 'critical' : telemetry.egt > 790 ? 'warning' : 'nominal'}
+                  label={telemetry.egt > 820 ? 'HIGH' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -640,10 +904,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 14 - 24 L/h</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.fuelFlow > 26 ? '#DC2626' : telemetry.fuelFlow > 22 ? '#D97706' : '#0F172A' }}>
                   {telemetry.fuelFlow.toFixed(1)} L/h
                 </span>
-                <StatusBadge status="nominal" />
+                <StatusBadge
+                  status={telemetry.fuelFlow > 26 ? 'critical' : telemetry.fuelFlow > 22 ? 'warning' : 'nominal'}
+                  label={telemetry.fuelFlow > 26 ? 'SURGE' : telemetry.fuelFlow > 22 ? 'HIGH' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -654,10 +921,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Limit: &lt; 3.0 mm/s</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.vibration > 4.0 ? '#DC2626' : telemetry.vibration > 3.0 ? '#D97706' : '#0F172A' }}>
                   {telemetry.vibration.toFixed(1)} mm/s
                 </span>
-                <StatusBadge status={telemetry.vibration > 3.0 ? 'warning' : 'nominal'} />
+                <StatusBadge
+                  status={telemetry.vibration > 4.0 ? 'critical' : telemetry.vibration > 3.0 ? 'warning' : 'nominal'}
+                  label={telemetry.vibration > 4.0 ? 'KNOCK' : telemetry.vibration > 3.0 ? 'HIGH' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -668,10 +938,13 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <div style={{ fontSize: '0.65rem', color: '#64748B' }}>Nominal: 28.0 V</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: telemetry.batteryVoltage < 25 ? '#DC2626' : telemetry.batteryVoltage < 26.5 ? '#D97706' : '#0F172A' }}>
                   {telemetry.batteryVoltage.toFixed(1)} V
                 </span>
-                <StatusBadge status="nominal" />
+                <StatusBadge
+                  status={telemetry.batteryVoltage < 25 ? 'critical' : telemetry.batteryVoltage < 26.5 ? 'warning' : 'nominal'}
+                  label={telemetry.batteryVoltage < 25 ? 'LOW' : 'NOMINAL'}
+                />
               </div>
             </div>
 
@@ -685,7 +958,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
                 <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.85rem', fontWeight: 700, color: '#0F172A' }}>
                   {telemetry.injectionTiming.toFixed(1)}° BTDC
                 </span>
-                <StatusBadge status="nominal" />
+                <StatusBadge status="nominal" label="NOMINAL" />
               </div>
             </div>
           </div>
@@ -987,7 +1260,7 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #E2E8F0' }}>
               <div>
                 <div style={{ fontSize: '0.68rem', color: '#64748B', textTransform: 'uppercase', fontWeight: 600 }}>Remaining Useful Life</div>
-                <div style={{ fontSize: '1.9rem', fontWeight: 800, color: aiAnalytics.rulHours < 50 ? '#DC2626' : '#B45309', fontFamily: '"JetBrains Mono", monospace' }}>
+                <div style={{ fontSize: '1.9rem', fontWeight: 800, color: aiAnalytics.rulHours < 50 ? '#DC2626' : aiAnalytics.rulHours < 200 ? '#D97706' : '#15803D', fontFamily: '"JetBrains Mono", monospace' }}>
                   {aiAnalytics.rulHours.toFixed(1)} <span style={{ fontSize: '1rem', color: '#64748B' }}>H</span>
                 </div>
                 <div style={{ fontSize: '0.68rem', color: '#0284C7', fontWeight: 600 }}>AI Confidence: {aiAnalytics.confidence}%</div>
@@ -1056,19 +1329,19 @@ export default function DroneConfigurationView({ drone, onBack }) {
             <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
               <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>AIRSPEED</span>
               <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#0F172A' }}>
-                142 KTS
+                {activeProfile.airspeed || 142} KTS
               </span>
             </div>
             <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
               <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>FUEL REMAINING</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: '#15803D' }}>
-                68%
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700, color: (activeProfile.fuelRemaining || 75) < 25 ? '#DC2626' : (activeProfile.fuelRemaining || 75) < 50 ? '#D97706' : '#15803D' }}>
+                {activeProfile.fuelRemaining || 68}%
               </span>
             </div>
             <div style={{ background: '#F8FAFC', padding: '4px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
               <span style={{ color: '#64748B', display: 'block', fontSize: '0.62rem' }}>COORDINATES</span>
               <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 600, color: '#334155' }}>
-                23.41°N, 72.56°E
+                {activeProfile.coordinates || '23.41°N, 72.56°E'}
               </span>
             </div>
           </div>

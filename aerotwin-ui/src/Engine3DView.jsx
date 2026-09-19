@@ -413,21 +413,24 @@ export default function Engine3DView({ telemetry }) {
 
         // Individual cylinder thermal variation (e.g. Cyl 4 runs hotter during fault)
         let cylCht = currentCht;
-        if (idx === 3 && isFault) {
-          cylCht += 35; // Simulated Cyl 4 hotspot
+        if (idx === 3 && (telem.fault_label === 3 || telem.fault_label === 4 || isFault)) {
+          cylCht += 25; // Simulated Cyl 4 hotspot
         }
 
-        if (cylCht > 190 || (isFault && idx === 3)) {
+        const isCriticalFault = telem.fault_label === 4 || telem.fault_label === 1 || cylCht > 190;
+        const isWarningFault = telem.fault_label === 3 || cylCht > 165;
+
+        if (isCriticalFault) {
           // Critical Alert: Clean Aviation Red
           const pulse = (Math.sin(elapsedTime * 6) + 1) / 2;
           mat.color.setHex(0xEF4444);
           mat.emissive.setHex(0xDC2626);
-          mat.emissiveIntensity = 0.35 + pulse * 0.35;
-        } else if (cylCht > 178) {
+          mat.emissiveIntensity = 0.45 + pulse * 0.4;
+        } else if (isWarningFault) {
           // Warning: Clean Aviation Amber
           mat.color.setHex(0xF59E0B);
           mat.emissive.setHex(0xD97706);
-          mat.emissiveIntensity = 0.22;
+          mat.emissiveIntensity = 0.28;
         } else {
           // Nominal Cruise: Machined Cold-Rolled Titanium Steel CAD Finish
           mat.color.setHex(0x64748B);
