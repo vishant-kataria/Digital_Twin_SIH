@@ -9,7 +9,7 @@
   --accent-amber: #ffb300;
   --accent-red: #ff3333;
   --accent-green: #00ff66;
-  
+
   --text-main: #e2e8f0;
   --text-muted: #8b9bb4;
   --text-cyan: #00f0ff;
@@ -30,11 +30,12 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-dark);
   color: var(--text-main);
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
   background-size: 30px 30px;
-  overflow: hidden; /* App takes full screen like a HUD */
+  overflow: hidden;
+  /* App takes full screen like a HUD */
 }
 
 /* Typography Utility */
@@ -57,8 +58,10 @@ body {
 .tactical-panel::before {
   content: '';
   position: absolute;
-  top: 0; left: 0;
-  width: 15px; height: 15px;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
   border-top: 2px solid var(--accent-cyan);
   border-left: 2px solid var(--accent-cyan);
 }
@@ -66,8 +69,10 @@ body {
 .tactical-panel::after {
   content: '';
   position: absolute;
-  bottom: 0; right: 0;
-  width: 15px; height: 15px;
+  bottom: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
   border-bottom: 2px solid var(--accent-cyan);
   border-right: 2px solid var(--accent-cyan);
 }
@@ -76,6 +81,7 @@ body {
 .tactical-panel.warning {
   border-color: rgba(255, 179, 0, 0.4);
 }
+
 .tactical-panel.warning::before,
 .tactical-panel.warning::after {
   border-color: var(--accent-amber);
@@ -86,15 +92,24 @@ body {
   border-color: rgba(255, 51, 51, 0.4);
   animation: pulse-border 2s infinite;
 }
+
 .tactical-panel.critical::before,
 .tactical-panel.critical::after {
   border-color: var(--accent-red);
 }
 
 @keyframes pulse-border {
-  0% { box-shadow: 0 0 5px rgba(255, 51, 51, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(255, 51, 51, 0.6); }
-  100% { box-shadow: 0 0 5px rgba(255, 51, 51, 0.2); }
+  0% {
+    box-shadow: 0 0 5px rgba(255, 51, 51, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+  }
+
+  100% {
+    box-shadow: 0 0 5px rgba(255, 51, 51, 0.2);
+  }
 }
 
 /* Layout Utilities */
@@ -135,18 +150,32 @@ body {
   margin-bottom: 10px;
   align-items: center;
 }
+
 .data-label {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
+
 .data-value {
   font-size: 1.1rem;
   color: var(--text-main);
 }
-.data-value.cyan { color: var(--accent-cyan); }
-.data-value.amber { color: var(--accent-amber); }
-.data-value.red { color: var(--accent-red); }
-.data-value.green { color: var(--accent-green); }
+
+.data-value.cyan {
+  color: var(--accent-cyan);
+}
+
+.data-value.amber {
+  color: var(--accent-amber);
+}
+
+.data-value.red {
+  color: var(--accent-red);
+}
+
+.data-value.green {
+  color: var(--accent-green);
+}
 
 /* Progress / Health Bar */
 .health-bar-container {
@@ -157,24 +186,33 @@ body {
   margin-top: 5px;
   overflow: hidden;
 }
+
 .health-bar-fill {
   height: 100%;
   background: var(--accent-cyan);
   transition: width 0.3s ease;
 }
-.health-bar-fill.warning { background: var(--accent-amber); }
-.health-bar-fill.critical { background: var(--accent-red); }
+
+.health-bar-fill.warning {
+  background: var(--accent-amber);
+}
+
+.health-bar-fill.critical {
+  background: var(--accent-red);
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--bg-panel-solid); 
+  background: var(--bg-panel-solid);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-cyan); 
+  background: var(--accent-cyan);
 }
 
 /* 3D Engine Viewport Styles */
@@ -225,8 +263,17 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.3); }
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
 }
 
 .engine-controls-bar {
@@ -249,7 +296,8 @@ body {
   transition: all 0.2s ease;
 }
 
-.btn-icon-pill:hover, .btn-icon-pill.active {
+.btn-icon-pill:hover,
+.btn-icon-pill.active {
   background: rgba(0, 240, 255, 0.15);
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
